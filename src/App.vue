@@ -1,17 +1,20 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <TheNavigation />
+    <router-view :key="$route.path" @agregarCarrito="consoleLog"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import TheNavigation from "@/components/TheNavigation";
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
+  components:{
+    TheNavigation
+  },
+  methods:{
+    consoleLog(agregarIdProducto){
+      console.log(agregarIdProducto)
+    }
   }
 }
 </script>
@@ -22,7 +25,15 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  color: #3c4753;
+}
+
+#nav a {
+  font-weight: bold;
+  color: #92aeca;
+}
+
+#nav a.clase-activacion-rutas {
+  color: #42b983;
 }
 </style>
