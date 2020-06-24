@@ -19,8 +19,9 @@
           :infoProducto="productAdded"
         />
       </div>
+      <!--
       <a class="dropdown-item" href="#">Something else here</a>
-      <a class="dropdown-item" href="#">{{cantidadPorRef}}</a>
+      <a class="dropdown-item" href="#">{{cantidadPorRef}}</a>-->
     </div>
   </div>
 </template>

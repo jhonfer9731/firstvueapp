@@ -15,7 +15,6 @@
           <p class="d-block producto-nombre">{{infoDataProducto.nombre}}</p>
           <small class="d-block">Marca: {{infoDataProducto.marca}}</small>
           <small class="d-block">Cantidad: {{infoDataProducto.cantidad}}</small>
-          <small class="d-block">Variant: {{infoDataProducto.selectedVariant}}</small>
         </div>
       </div>
     </div>
