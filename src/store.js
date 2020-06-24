@@ -27,7 +27,7 @@ export default{
             detalles: ['90% Algodon', '10% Polyester', 'Genero-masculino'],
             variante: [
             {
-                variantId: 2234,
+                variantId: 2336,
                 variantColor: 'green',
                 variantImage: "pantalon.jpg",
                 variantQuantity: 10     
@@ -41,7 +41,7 @@ export default{
             detalles: ['90% Algodon', '10% Polyester', 'Genero-masculino'],
             variante: [
             {
-                variantId: 2234,
+                variantId: 2437,
                 variantColor: 'green',
                 variantImage: "camisa.jpg",
                 variantQuantity: 10     
@@ -55,7 +55,7 @@ export default{
             detalles: ['90% Algodon', '10% Polyester', 'Genero-masculino'],
             variante: [
             {
-                variantId: 2234,
+                variantId: 2538,
                 variantColor: 'green',
                 variantImage: "tenisDeportivos.jpg",
                 variantQuantity: 10     
@@ -69,7 +69,7 @@ export default{
             detalles: ['90% Algodon', '10% Polyester', 'Genero-masculino'],
             variante: [
             {
-                variantId: 2234,
+                variantId: 2639,
                 variantColor: 'green',
                 variantImage: "zapatos.jpg",
                 variantQuantity: 10     
@@ -83,7 +83,7 @@ export default{
             detalles: ['90% Algodon', '10% Polyester', 'Genero-masculino'],
             variante: [
             {
-                variantId: 2234,
+                variantId: 2740,
                 variantColor: 'green',
                 variantImage: "camiseta.jpg",
                 variantQuantity: 10     

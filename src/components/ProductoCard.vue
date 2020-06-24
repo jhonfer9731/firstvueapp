@@ -38,6 +38,7 @@ export default {
   methods:{
     agregarCarrito(){
       bus.$emit('agregarCarrito',this.agregarIdProducto);
+      console.log(this.agregarIdProducto);
     }
   }
 };
