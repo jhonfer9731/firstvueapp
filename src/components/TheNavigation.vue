@@ -41,7 +41,7 @@ export default {
 
 <style>
 #nav {
-  margin: 5px 0px;
-  padding: 15px 1%;
+  margin: 0px 0px;
+  padding: 15px 2%;
 }
 </style>

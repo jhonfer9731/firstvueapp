@@ -1,5 +1,5 @@
 <template>
-  <div class="dropdown">
+  <div class="nav-item dropdown">
     <button
       class="carrito_btn btn btn-success dropdown-toggle bg-dark"
       id="dropDownMenuLink"

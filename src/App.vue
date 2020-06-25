@@ -30,7 +30,7 @@ export default {
 
 #nav a {
   font-weight: bold;
-  color: #92aeca;
+  color: #f6f6fbf3;
 }
 
 #nav a.clase-activacion-rutas {

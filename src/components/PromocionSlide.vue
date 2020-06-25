@@ -1,12 +1,20 @@
 <template>
-  <div class="slidebar">
-    Slide bar va aqui
-    <div class="d-flex flex-column bd-highlight mb-3">
+
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img class="d-block w-100 bg-image" :src="require(`@/assets/images/slideshow-tenis.jpg`)" alt="First Slide">
+          </div>
+          <div class="carousel-item">
+            <img class="d-block w-100 bg-image" :src="require(`@/assets/images/slideshow-camiseta.jpg`)" alt="Second slide">         
+          </div>
+        </div>
+        
+    <!-- <div class="d-flex flex-column bd-highlight mb-3">
       <div class="p-2 bd-highlight">Flex item 1</div>
       <div class="p-2 bd-highlight">Flex item 2</div>
       <div class="p-2 bd-highlight">Flex item 3</div>
-    </div>
-  </div>
+    </div> -->
+  
 </template>
 
 <script>
@@ -16,10 +24,24 @@ export default {
 </script>
 
 <style scoped>
-.slidebar {
-  min-height: 400px;
-  max-width: 90%;
-  border: 1px green solid;
-  margin: 20px auto;
+
+/*
+.carousel{
+
 }
+
+.carousel-item, .carousel-inner{
+  height: 100% !important;
+}*/
+.carousel-item{
+  height: 800px;
+}
+.bg-image{
+  position: relative;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+
 </style>
