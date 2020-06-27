@@ -1,7 +1,7 @@
 <template>
   <div class="home">
-    <PromocionSlide :promocionesSlide="promociones" />
-    <SeccionesTienda />
+    <PromocionSlide :promocionesSlide="promociones" /> 
+    <SeccionesTienda /> 
     <div class="bloque-servicios">
       <div class="container">
         <div class="row">
