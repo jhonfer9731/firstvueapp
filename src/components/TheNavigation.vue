@@ -1,5 +1,5 @@
 <template>
-  <div id="nav" class="navbar navbar-expand-sm navbar-light bg-dark">
+  <div id="nav" class="navbar sticky-top navbar-expand-sm navbar-light bg-dark">
     <router-link to="/" class="navbar-brand">JF</router-link>
     <button
       class="navbar-toggler"

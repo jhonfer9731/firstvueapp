@@ -2,14 +2,17 @@
   <div id="app">
     <TheNavigation />
     <router-view :key="$route.path"/>
+    <TheFooter />
   </div>
 </template>
 
 <script>
 import TheNavigation from "@/components/TheNavigation";
+import TheFooter from "@/components/TheFooter";
 export default {
   components:{
-    TheNavigation
+    TheNavigation,
+    TheFooter
   },
   methods:{
     consoleLog(agregarIdProducto){
@@ -35,5 +38,9 @@ export default {
 
 #nav a.clase-activacion-rutas {
   color: #42b983;
+}
+
+a:hover{
+  text-decoration: none;
 }
 </style>

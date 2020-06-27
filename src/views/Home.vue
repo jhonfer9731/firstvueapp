@@ -1,46 +1,38 @@
 <template>
   <div class="home">
-    <div class="home-header">
-      <div class="header-text">
-        <h1 :class="{'header-text-title': true}">Nuestras Promociones</h1>
-      </div>
-      <div class="slideshow header-slide">
-        <div class="full-slideshow-image">
-          <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-            <!--<ol class="carousel-indicators">
-              <li
-                data-target="#carouselExampleIndicators"
-                data-slide-to="0"
-                class="active bg-light"
-              ></li>
-              <li data-target="#carouselExampleIndicators" data-slide-to="1" class="bg-light"></li>
-            </ol>-->
-            <promocionSlide :class=" {'' : true}" />
-            <a
-              class="carousel-control-prev"
-              href="#carouselExampleIndicators"
-              role="button"
-              data-slide="prev"
-            >
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="sr-only">Previous</span>
-            </a>
-            <a
-              class="carousel-control-next"
-              href="#carouselExampleIndicators"
-              role="button"
-              data-slide="next"
-            >
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="sr-only">Next</span>
-            </a>
+    <PromocionSlide :promocionesSlide="promociones" />
+    <div class="bloque-servicios">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 columna-servicios">
+            <div class="servicio-texto">
+              <img :src="require(`@/assets/icons/lkw.png`)" width="80" height="80" class="pb-3"/>
+              <h6 class="text-uppercase">Envio gratis y devolucion</h6>
+              <p class="text-muted text-sm mb-0 font-weight-light">Envio gratis sobre 60 mil</p>
+            </div>
           </div>
+          <div class="col-lg-4 columna-servicios">
+            <div class="servicio-texto">
+              <img :src="require(`@/assets/icons/warranty.png`)" width="80" height="80" class="pb-3"/>
+              <h6 class="text-uppercase">Garantia de rembolso</h6>
+              <p class="text-muted text-sm mb-0 font-weight-light">Garantia de 30 dias para devolucion</p>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="servicio-texto">
+              <img :src="require(`@/assets/icons/customer-service.png`)" width="80" height="80" class="pb-3"/>
+              <h6 class="text-uppercase">Tel: 316-324-3124</h6>
+              <p class="text-muted text-sm mb-0 font-weight-light">Soporte Online en su compra</p>
+            </div>
+          </div>
+        </div>
+        <div class="boton-dimension">
+          <router-link class="btn btn-outline-success btn-block" :to="{name:'Registro'}">Suscribete ahora </router-link>
         </div>
       </div>
     </div>
   </div>
 </template>
-
 <script>
 // @ is an alias to /src
 import PromocionSlide from "@/components/PromocionSlide";
@@ -51,55 +43,30 @@ export default {
   },
   data() {
     return {
-      promociones: ["Nuestras Promociones"]
+      promociones: ["Los mas<br/>vendidos"]
     };
   }
 };
 </script>
 
 <style scoped>
-.slideshow {
-  max-height: 600px;
-  max-width: 100%;
-  border: 1px green solid;
-  margin: 0px auto;
+.bloque-servicios {
+  padding: 60px 0%;
+  background: #e1e0e6;
 }
-.home-header {
-  position: relative;
-  width: 100%;
-  height: 100%;
+.servicio-texto{
+  text-align: center;
+  margin-bottom: 20px;
 }
-
-.header-text,
-.header-slide {
-  position: absolute;
-  top: 0;
-  left: 0;
+.col-lg-4{
+  text-align: left;
 }
-.header-text {
-  z-index: 1;
-  width: 100%;
-  background: #00000052;
-  background: linear-gradient(
-    180deg,
-    #343a40 0%,
-    #07074250 70%,
-    #11111100 90%
-  );
+.columna-servicios{
+  border-right: 1px solid #1f1d1d;
 }
-
-
-.header-text-title {
-  color: #f6f6fb;
-  font-size: 4rem;
-  padding: 10% 0px;
-  padding-bottom: 20%;
-}
-.header-slide {
-  z-index: 0;
-}
-
-#carouselExampleIndicators{
-  z-index: 2;
+.boton-dimension{
+  width: 40%;
+  margin: 40px auto;
+  margin-top :  50px;
 }
 </style>
