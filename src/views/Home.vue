@@ -1,6 +1,7 @@
 <template>
   <div class="home">
     <PromocionSlide :promocionesSlide="promociones" />
+    <SeccionesTienda />
     <div class="bloque-servicios">
       <div class="container">
         <div class="row">
@@ -36,10 +37,12 @@
 <script>
 // @ is an alias to /src
 import PromocionSlide from "@/components/PromocionSlide";
+import SeccionesTienda from "@/components/SeccionesTienda";
 export default {
   name: "Home",
   components: {
-    PromocionSlide
+    PromocionSlide,
+    SeccionesTienda
   },
   data() {
     return {

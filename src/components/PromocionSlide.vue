@@ -71,7 +71,6 @@ export default {
   height: 100%;
 }
 .header-carousel-text {
-  
   position: absolute;
   z-index: 1;
   width: 100%;
@@ -82,18 +81,15 @@ export default {
   padding-bottom: 26.9%;*/
 }
 .carousel-text-title {
-
   color: #f6f6fb;
   font-size: 4.4rem;
   font-weight: bold;
   padding-top: 8%;
-  transition: ease-out 300ms;
-
 }
 
 .carousel-text-title:hover{
-  transform: scale(1.1)translateY(-2px);
-  transition: ease-in 300ms;
+  transform: scale(1.0)translateY(-2px);
+  transition: ease-out 300ms;
 }
 .carousel-item{
   height: 800px;
