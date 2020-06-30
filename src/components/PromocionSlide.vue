@@ -85,10 +85,11 @@ export default {
   font-size: 4.4rem;
   font-weight: bold;
   padding-top: 8%;
+  transition: ease 300ms;
 }
 
 .carousel-text-title:hover{
-  transform: scale(1.0)translateY(-2px);
+  transform: scale(1.0)translateY(-6px);
   transition: ease-out 300ms;
 }
 .carousel-item{

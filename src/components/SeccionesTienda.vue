@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-6">
+      <div class="col-lg-6">
         <div class="card">
           <div class="card-body">
             <img :src="require(`@/assets/images/${secciones[0].imagen}`)" class="seccion-bg-image" />
@@ -16,7 +16,7 @@
           </div>
         </div>
       </div>
-      <div class="col-6">
+      <div class="col-lg-6">
         <div class="card">
           <div class="card-body">
             <img :src="require(`@/assets/images/${secciones[1].imagen}`)" class="seccion-bg-image" />
