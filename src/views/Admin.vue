@@ -49,21 +49,34 @@
                             <span>General</span>
                         </li>
                         <li class="sidebar-dropdown">
-                            <a href="#">
+                            <router-link to="/admin/pizarra">
                                 <i class="fa fa-tachometer-alt"></i>
                                 <span class="menu-text">Dashboard</span>
-                            </a>
-            
+                            </router-link>
+                            <div class="sidebar-submenu">
+                                <ul>
+                                    <li>
+                                        <a href="#">Dashboard 1
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Dashboard 2</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Dashboard 3</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
 
                         <li class="header-menu">
                             <span>Extra</span>
                         </li>
                         <li>
-                            <a href="#">
+                            <router-link to="/admin/productos">
                                 <i class="fa fa-book"></i>
-                                <span class="menu-text">Documentation</span>
-                            </a>
+                                <span class="menu-text">Productos</span>
+                            </router-link>
                         </li>
                         <li>
                             <a href="#">
@@ -84,38 +97,11 @@
         </nav>
         <!-- page-content  -->
         <main class="page-content pt-2">
-            <div id="overlay" class="overlay"></div>
-            <div class="container-fluid p-5">
-                <div class="row">
-                    <div class="form-group col-md-12">
-                        <h2>Pro Sidebar</h2>
-                        <p>This is a responsive sidebar template with dropdown menu based on bootstrap framework.</p>
-
-                    </div>
-                    <div class="form-group col-md-12">
-                        <iframe
-                            src="https://ghbtns.com/github-btn.html?user=azouaoui-med&repo=pro-sidebar-template&type=star&count=true&size=small"
-                            frameborder="0" scrolling="0" width="100px" height="30px"></iframe>
-                        <iframe
-                            src="https://ghbtns.com/github-btn.html?user=azouaoui-med&repo=pro-sidebar-template&type=fork&count=true&size=small"
-                            frameborder="0" scrolling="0" width="100px" height="30px"></iframe>
-                    </div>
-
-                    <div class="form-group col-md-12">
-                        <a id="toggle-sidebar" class="btn btn-secondary rounded-0" href="#">
-                            <span>Toggle Sidebar</span>
-                        </a>
-                        <a id="pin-sidebar" class="btn btn-outline-secondary rounded-0" href="#">
-                            <span>Pin Sidebar</span>
-                        </a>
-
-                    </div>
-                </div>
-
-
-
-
-            </div>
+            <router-view :key="$route.path"/>
+            <!--<div id="overlay" class="overlay"></div>-->
+            <!--<div class="container">
+                
+            </div>-->
         </main>
         <!-- page-content" -->
     </div>

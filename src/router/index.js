@@ -31,7 +31,19 @@ Vue.use(VueRouter)
   {
     path: '/admin',
     name: 'Admin',
-    component: () => import(/* webpackChunkName: "admin" */ '../views/Admin.vue')
+    component: () => import(/* webpackChunkName: "admin" */ '../views/Admin.vue'),
+    children:[
+      {
+        path: 'pizarra',
+        name: 'Pizarra',
+        component: () => import(/* webpackChunkName: "registro" */ '../views/Pizarra.vue')
+      },
+      {
+        path: 'productos',
+        name: 'Productos',
+        component: () => import(/* webpackChunkName: "productos" */ '../views/Productos.vue')
+      }
+    ]
   }
 ]
 

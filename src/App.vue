@@ -2,17 +2,17 @@
   <div id="app">
     <!-- <TheNavigation /> -->
     <router-view :key="$route.path"/>
-    <TheFooter />
+    <!-- <TheFooter /> -->
   </div>
 </template>
 
 <script>
 //import TheNavigation from "@/components/TheNavigation";
-import TheFooter from "@/components/TheFooter";
+//import TheFooter from "@/components/TheFooter";
 export default {
   components:{
     //TheNavigation,
-    TheFooter
+    //TheFooter
   },
   methods:{
     consoleLog(agregarIdProducto){
