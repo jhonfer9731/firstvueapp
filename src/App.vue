@@ -1,17 +1,17 @@
 <template>
   <div id="app">
-    <TheNavigation />
+    <!-- <TheNavigation /> -->
     <router-view :key="$route.path"/>
     <TheFooter />
   </div>
 </template>
 
 <script>
-import TheNavigation from "@/components/TheNavigation";
+//import TheNavigation from "@/components/TheNavigation";
 import TheFooter from "@/components/TheFooter";
 export default {
   components:{
-    TheNavigation,
+    //TheNavigation,
     TheFooter
   },
   methods:{

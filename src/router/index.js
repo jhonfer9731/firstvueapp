@@ -27,6 +27,11 @@ Vue.use(VueRouter)
     path: '/registro',
     name: 'Registro',
     component: () => import(/* webpackChunkName: "registro" */ '../views/Registro.vue')
+  },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: () => import(/* webpackChunkName: "admin" */ '../views/Admin.vue')
   }
 ]
 
