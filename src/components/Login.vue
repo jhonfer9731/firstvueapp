@@ -199,8 +199,6 @@ export default {
   }
 }
 
-.modal-header {
-}
 
 .ingreso-footer {
   animation-name: opacity-formulario;

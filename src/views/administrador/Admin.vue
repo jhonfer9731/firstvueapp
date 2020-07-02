@@ -90,6 +90,12 @@
                                 <span class="menu-text">Examples</span>
                             </a>
                         </li>
+                        <li>
+                            <a href="#" @click="logout">
+                                <i class="fa fa-sign-out"></i>
+                                <span class="menu-text">Cerrar Sesion</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
                 <!-- sidebar-menu  -->
@@ -110,12 +116,20 @@
 
 <script>
 import jQuery from 'jquery';
+import {fb} from '@/firebase.js';
 window.$ = window.jQuery = jQuery;
 export default {
     name: "Admin",
     methods:{
         closeMenu(){
             window.$('.page-wrapper').toggleClass('toggled');
+        },
+        logout(){
+            fb.auth().signOut()
+            .then(() => {
+                this.$router.replace({name: 'Home'})
+                })
+            .catch((err) => console.log(err))
         }
     }
 }
