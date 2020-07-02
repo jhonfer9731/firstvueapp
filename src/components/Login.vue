@@ -22,7 +22,7 @@
             <form action="#" @submit.prevent="ingresoUsuario">
               <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" class="form-control" placeholder="email@example.com" />
+                <input type="email" v-model="email" id="email" class="form-control" placeholder="email@example.com" />
               </div>
               <div class="form-group mb-4">
                 <label for="password">Contraseña</label>
@@ -30,6 +30,7 @@
                   type="password"
                   id="password"
                   class="form-control"
+                  v-model="password"
                   placeholder="Ingrese contraseña"
                 />
               </div>
@@ -128,12 +129,12 @@
 </template>
 
 <script>
-import {fb} from '@/firebase.js'; // import only in this component
+import { fb } from "@/firebase.js"; // import only in this component
 export default {
   name: "Login",
   data() {
     return {
-      isSignUpForm: false,
+      isSignUpForm: true,
       nombre: null,
       email: null,
       password: null,
@@ -142,24 +143,23 @@ export default {
   },
   methods: {
     registroUsuario() {
-      console.log("entro a registro de usuario")
+      //console.log("entro a registro de usuario")
       if (this.notMatch) {
         return false;
       } else {
-        fb
-          .auth()
+        fb.auth()
           .createUserWithEmailAndPassword(this.email, this.password)
-          .then((user) =>{
-            console.log(user)
-            window.$('#login').modal('hide')
-            this.$router.replace({name: 'Admin'})
+          .then(user => {
+            console.log(user);
+            window.$("#login").modal("hide");
+            this.$router.replace({ name: "Admin" });
           })
           .catch(function(error) {
             // Handle Errors here.
             var errorCode = error.code;
             var errorMessage = error.message;
             if (errorCode == "auth/weak-password") {
-              alert("The password is too weak. "+errorMessage);
+              alert("The password is too weak. " + errorMessage);
             } else {
               alert(errorMessage);
             }
@@ -168,7 +168,30 @@ export default {
         return false;
       }
     },
-    ingresoUsuario() {}
+    ingresoUsuario() {
+      if (this.email === null) this.email = '';
+      if (this.password === null) this.password = '';
+      fb
+        .auth()
+        .signInWithEmailAndPassword(this.email, this.password)
+        .then(()=>{
+          window.$("#login").modal("hide");
+          this.$router.replace({name: 'Admin'})
+        })
+        .catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          if (errorCode === "auth/wrong-password") {
+            alert("Wrong password.");
+          } else {
+            alert(errorMessage);
+          }
+          console.log(error);
+        });
+      return false;
+    }
+    
   },
   computed: {
     notMatch() {
@@ -198,7 +221,6 @@ export default {
     opacity: 1;
   }
 }
-
 
 .ingreso-footer {
   animation-name: opacity-formulario;
