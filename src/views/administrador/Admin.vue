@@ -49,7 +49,7 @@
                             <span>General</span>
                         </li>
                         <li class="sidebar-dropdown">
-                            <router-link to="/admin/pizarra">
+                            <router-link :to="{name:'Pizarra'}">
                                 <i class="fa fa-tachometer-alt"></i>
                                 <span class="menu-text">Dashboard</span>
                             </router-link>
@@ -73,7 +73,7 @@
                             <span>Extra</span>
                         </li>
                         <li>
-                            <router-link to="/admin/productos">
+                            <router-link :to="{name: 'ProductosAdmin'}">
                                 <i class="fa fa-book"></i>
                                 <span class="menu-text">Productos</span>
                             </router-link>

@@ -20,7 +20,9 @@
         <router-link :to="{name: 'Productos'}" class="nav-item nav-link">Productos</router-link>
       </div>
       <div class="navbar-nav">
-        <router-link :to="{name: 'Registro'}" class="nav-item nav-link">Mi cuenta</router-link>
+        <div class="nav-item">
+        <button class="btn btn-success bg-dark" data-toggle="modal" data-target="#login">Mi cuenta</button>
+        </div>
         <!--<form class="form-inline" @click.prevent>
           <button class="btn btn-primary">Carrito</button>
         </form>-->

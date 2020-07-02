@@ -5,7 +5,7 @@
               <div class="row h-100 justify-content-center align-items-center">
                   <div class="col-md-6">
                       <h3>Tu Pizarra</h3>
-                      <p> El contenido de toda tu informacion sobre la empresa. </p>
+                      <p> El contenido de toda tu informacion sobre la empresa, estadisticas sobre los productos entre otros. </p>
                   </div>
                   <div class="col-md-6">
                       <img :src="require('@/assets/images/svg/pizarra_img.svg')" alt="" class="img-fluid">
