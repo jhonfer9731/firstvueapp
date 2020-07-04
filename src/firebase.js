@@ -1,5 +1,7 @@
 //Initialize firebase
 import firebase from 'firebase';
+require("firebase/firestore");
+
 const firebaseConfig = {
     apiKey: "AIzaSyAf5ORMgS6yxYjwtopn4KuGlfqJqHLFZfM",
     authDomain: "jfappshop-vue.firebaseapp.com",
@@ -11,4 +13,10 @@ const firebaseConfig = {
     measurementId: "G-MS98F2R3RZ"
   };
 
-  export const fb = firebase.initializeApp(firebaseConfig);
+  const fb = firebase.initializeApp(firebaseConfig);
+
+  const db = firebase.firestore();
+
+  export {fb,db}
+
+  

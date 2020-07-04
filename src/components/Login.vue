@@ -152,15 +152,15 @@ export default {
           .then(user => {
             console.log(user);
             window.$("#login").modal("hide");
-            this.$router.replace({ name: "Admin" });
+            this.$router.replace({ name: "Admin"});
           })
           .catch(function(error) {
             // Handle Errors here.
             var errorCode = error.code;
             var errorMessage = error.message;
             if (errorCode == "auth/weak-password") {
-              alert("The password is too weak. " + errorMessage);
-            } else {
+              alert("Contraseña debil, debe contener mas de 6 caracteres");
+            }else{
               alert(errorMessage);
             }
             console.log(error);
@@ -183,7 +183,7 @@ export default {
           var errorCode = error.code;
           var errorMessage = error.message;
           if (errorCode === "auth/wrong-password") {
-            alert("Wrong password.");
+            alert("Contraseña Incorrecta.");
           } else {
             alert(errorMessage);
           }
@@ -225,9 +225,6 @@ export default {
 .ingreso-footer {
   animation-name: opacity-formulario;
   animation-duration: 800ms;
-}
-
-.registro-footer {
 }
 
 .modal-body .form-control {

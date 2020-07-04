@@ -41,7 +41,7 @@ const routes = [
     path: '/admin',
     name: 'Admin',
     meta:{
-      requiresAuth: true
+      requiresAuth: true // Para esta ruta el usuario tiene que estar
     },
     component: () => import(/* webpackChunkName: "admin" */ '../views/administrador/Admin.vue'),
     children: [
@@ -54,7 +54,7 @@ const routes = [
       {
         path: 'productos',
         name: 'ProductosAdmin',
-        component: () => import(/* webpackChunkName: "productos" */ '../views/Productos.vue')
+        component: () => import(/* webpackChunkName: "productos" */ '../views/administrador/ProductosAdmin.vue')
       }
     ]
   }
