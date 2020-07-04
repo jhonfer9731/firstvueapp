@@ -1,28 +1,11 @@
 <template>
   <div class="container-lg">
-    <h3>Basic CRUD</h3>
+    <h3>Inventario</h3>
     <div class="product-test">
-      <div class="form-group">
-        <input
-          type="text"
-          placeholder="Nombre Producto"
-          v-model="producto.nombre"
-          class="form-control"
-        />
-      </div>
-      <div class="form-group">
-        <input
-          type="text"
-          placeholder="Precio Producto"
-          v-model="producto.precio"
-          class="form-control"
-        />
-      </div>
-      <div class="form-group">
-        <button @click="saveData" class="btn btn-primary">Guardar Datos</button>
-      </div>
+      <h3 class="d-inline-block float-left">Lista de productos</h3>
+      <button class="btn btn-primary float-right" @click="addNew">Agregar Producto</button>
     </div>
-    <h3>Lista de productos</h3>
+
     <table class="table">
       <thead class="thead-dark">
         <tr>
@@ -33,27 +16,72 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(producto,index) in productos" :key="index">
+        <tr v-for="(productoLoop,index) in productos" :key="index">
           <td scope="row">{{index+1}}</td>
           <td scope="row">
-            <div class="edit-off" v-show="!producto.editOn">{{producto.data().nombre}}</div>
-            <div class="edit-on col-lg-8" v-show="producto.editOn">
-              <input type="text" class="form-control" v-model="producto.data().nombre" />
+            <div class="edit-off" v-show="!productoLoop.editOn">{{productoLoop.data().nombre}}</div>
+            <div class="edit-on col-lg-8" v-show="productoLoop.editOn">
+              <input type="text" class="form-control" v-model="producto.nombre" />
             </div>
           </td>
           <td scope="row">
-            <div class="edit-off" v-show="!producto.editOn">{{producto.data().precio}}</div>
-            <div class="edit-on col-lg-6" v-show="producto.editOn">
-              <input type="text" class="form-control" v-model="producto.data().precio" />
+            <div class="edit-off" v-show="!productoLoop.editOn">{{productoLoop.data().precio}}</div>
+            <div class="edit-on col-lg-6" v-show="productoLoop.editOn">
+              <input type="text" class="form-control" v-model="producto.precio" />
             </div>
           </td>
           <td>
-            <button @click="editarProducto(index)" class="btn btn-primary">Editar</button>
-            <button @click="borrarProducto(producto.id)" class="btn btn-danger">Borrar</button>
+            <button
+              @click="editarProducto(index)"
+              class="btn mx-2"
+              :class="{'btn-primary': !productoLoop.editOn}"
+              v-show="!productoLoop.editOn"
+              :disabled="isDisabled(index)"
+            >Editar</button>
+            <button
+              @click="updateData(index)"
+              class="btn mx-2"
+              :class="{'btn-warning': productoLoop.editOn}"
+              v-show="productoLoop.editOn"
+            >Guardar</button>
+
+            <button @click="borrarProducto(productoLoop.id)" class="btn btn-danger">Borrar</button>
           </td>
         </tr>
       </tbody>
     </table>
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="NuevoProducto"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalCenterTitle"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editLabel">Agregar Producto</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <input class="form-control" type="text" placeholder="Nombre del producto" v-model="producto.nombre">
+            </div>
+            <div class="form-group">
+              <input class="form-control" type="text" placeholder="Precio" v-model="producto.precio">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-primary" @click="agregarProducto">Agregar Producto</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -70,17 +98,24 @@ export default {
         precio: null
       },
       //editOn: false,
-      indexedElementEdit: 0
+      activeItemIndex: null,
+      activeItemId: null
     };
   },
   methods: {
-    saveData() {
+    addNew() {
+      window.$("#NuevoProducto").modal("show");
+    },
+    agregarProducto() {
       db.collection("products")
         .add(this.producto)
         .then(docRef => {
           console.log("Document written with ID: ", docRef.id);
-          this.readData();
+          this.producto.nombre = "";
+          this.producto.precio = "";
+          //this.readData();
           this.cleanData();
+          window.$("#NuevoProducto").modal("hide");
         })
         .catch(function(error) {
           console.error("Error adding document: ", error);
@@ -116,14 +151,53 @@ export default {
       }
     },
     editarProducto(index) {
-      this.editOn = true;
       this.productos[index].editOn = true;
-      this.indexedElementEdit = index;
-      console.log(index);
+      this.activeItemIndex = index;
+      this.producto = this.productos[index].data();
+      this.activeItemId = this.productos[index].id;
+    },
+    updateData(index) {
+      // pasa los elementos por referencia por eso this.producto se actualiza
+      this.productos[index].editOn = false;
+      db.collection("products")
+        .doc(this.activeItemId)
+        .update(this.producto)
+        .then(function() {
+          console.log("Documento Actualizado correctamente!");
+          this.producto.nombre = "";
+          this.producto.precio = "";
+        })
+        .catch(function(error) {
+          // The document probably doesn't exist.
+          console.error("Error actualizando documento: ", error);
+        });
+    },
+    isDisabled(index) {
+      if (this.productos[this.activeItemIndex]) {
+        return (
+          index !== this.activeItemIndex &&
+          this.productos[this.activeItemIndex].editOn === true
+        );
+      } else {
+        return false;
+      }
     }
   },
   created() {
     this.readData();
+  },
+  computed: {},
+  mounted() {
+    this.$nextTick(() => {
+      db.collection("products").onSnapshot(querySnapshot => {
+        console.log("Cambio base de datos");
+        this.productos = [];
+        querySnapshot.forEach(doc => {
+          doc.editOn = false;
+          this.productos.push(doc);
+        });
+      });
+    });
   }
 };
 </script>
