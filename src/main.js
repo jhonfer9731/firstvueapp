@@ -2,12 +2,34 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import jQuery from 'jquery';
-
+import VueFirestore from 'vue-firestore';
+Vue.use(VueFirestore)
 window.$ = window.jQuery = jQuery;
 import 'popper.js';
 import 'bootstrap';
 import './assets/app.scss';
 import {fb} from '@/firebase.js';
+import Swal from 'sweetalert2';
+
+/* Swal */
+
+
+window.Swal = Swal;
+
+
+window.Toast = window.Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  onOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+})
+
+
 
 Vue.config.productionTip = false
 

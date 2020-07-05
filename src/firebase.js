@@ -1,7 +1,7 @@
 //Initialize firebase
 import firebase from 'firebase';
 require("firebase/firestore");
-
+import 'firebase/storage';
 const firebaseConfig = {
     apiKey: "AIzaSyAf5ORMgS6yxYjwtopn4KuGlfqJqHLFZfM",
     authDomain: "jfappshop-vue.firebaseapp.com",

@@ -56,10 +56,10 @@
       id="NuevoProducto"
       tabindex="-1"
       role="dialog"
-      aria-labelledby="exampleModalCenterTitle"
+      aria-labelledby="exampleModalLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="editLabel">Agregar Producto</h5>
@@ -68,11 +68,60 @@
             </button>
           </div>
           <div class="modal-body">
-            <div class="form-group">
-              <input class="form-control" type="text" placeholder="Nombre del producto" v-model="producto.nombre">
-            </div>
-            <div class="form-group">
-              <input class="form-control" type="text" placeholder="Precio" v-model="producto.precio">
+            <div class="container-fuid">
+              <div class="row">
+                <div class="col-lg-8">
+                  <div class="form-group">
+                    <input
+                      class="form-control"
+                      type="text"
+                      placeholder="Nombre del producto"
+                      v-model="producto.nombre"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <VueEditor v-model="producto.descripcion" />
+                  </div>
+                </div>
+
+                <div class="col-lg-4">
+                  <h4 class="display-6">Detalles del produto</h4>
+                  <hr />
+                  <div class="form-group">
+                    <input
+                      class="form-control"
+                      type="text"
+                      placeholder="Precio"
+                      v-model="producto.precio"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <input
+                      class="form-control"
+                      type="text"
+                      placeholder="Tags"
+                      v-model="tag"
+                      @keyup.188="addTag"
+                    />
+                    <div class="show-tags" v-if="producto.tags.length">
+                      <li
+                        v-for="(tagProducto,index) in producto.tags"
+                        :key="index"
+                        class="d-inline-block m-2 border px-1"
+                      >
+                        {{tagProducto}}
+                        <a href="#" @click="removeTag(index)">
+                          <i class="fa fa-times-circle" aria-hidden="true"></i>
+                        </a>
+                      </li>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="product_image">Imagenes Producto</label>
+                    <input type="file" @change="cargarImagen" class="form-control" />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="modal-footer">
@@ -86,28 +135,57 @@
 </template>
 
 <script>
-import { db } from "@/firebase.js";
-
+import { db, fb } from "@/firebase.js";
+import { VueEditor } from "vue2-editor";
 export default {
   name: "ProductosAdmin",
+  components: {
+    VueEditor
+  },
   data() {
     return {
       productos: [],
       producto: {
         nombre: null,
-        precio: null
+        precio: null,
+        descripcion: null,
+        tags: [],
+        image: null
       },
+      //products: [],
       //editOn: false,
       activeItemIndex: null,
-      activeItemId: null
+      activeItemId: null,
+      tag: ""
     };
   },
   methods: {
+    cargarImagen(e) {
+      let file = e.target.files[0];
+      var storageRef = fb.storage().ref("products/" + file.name);
+      let uploadTask = storageRef.put(file); // para poder ultizar los metodos de task
+      uploadTask.on(
+        "state_changed",
+        snapshot => {
+          console.log(snapshot);
+        },
+        error => {
+          console.log(error);
+        },
+        () => {
+          //successfull part, it runs when the load is completed
+          uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
+            this.producto.image = downloadURL;
+          });
+        }
+      );
+      //console.log(e.target.files[0])
+    },
     addNew() {
       window.$("#NuevoProducto").modal("show");
     },
     agregarProducto() {
-      db.collection("products")
+      /*db.collection("products")
         .add(this.producto)
         .then(docRef => {
           console.log("Document written with ID: ", docRef.id);
@@ -119,7 +197,9 @@ export default {
         })
         .catch(function(error) {
           console.error("Error adding document: ", error);
-        });
+        });*/
+      this.$firestore.products.add(this.producto);
+      window.$("#NuevoProducto").modal("hide");
     },
     cleanData() {
       //Object.assign(this.$data, this.$options.data.apply(this));
@@ -138,17 +218,32 @@ export default {
         });
     },
     borrarProducto(productoId) {
-      if (confirm("Estas seguro? ")) {
-        db.collection("products")
-          .doc(productoId)
-          .delete()
-          .then(function() {
-            alert("Producto Eliminado exitosamente");
-          })
-          .catch(function(error) {
-            console.error("Error al eliminar el documento", error);
-          });
-      }
+      window.Swal.fire({
+        // permite mostrar modals de forma animada para alertar al usuario
+        title: "Estas seguro?",
+        text: "El item no podra ser recuperado!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Eliminar"
+      }).then(result => {
+        if (result.value) {
+          db.collection("products")
+            .doc(productoId)
+            .delete()
+            .then(function() {
+              window.Toast.fire({
+                icon: "success",
+                title: "El item ha sido eliminado."
+              });
+              //window.Swal.fire("Eliminado!", "El item ha sido eliminado.", "success");
+            })
+            .catch(function(error) {
+              window.Swal.fire("Error!", error, "error");
+            });
+        }
+      });
     },
     editarProducto(index) {
       this.productos[index].editOn = true;
@@ -164,8 +259,11 @@ export default {
         .update(this.producto)
         .then(function() {
           console.log("Documento Actualizado correctamente!");
-          this.producto.nombre = "";
-          this.producto.precio = "";
+          window.Toast.fire({
+            icon: "success",
+            title: "Producto Actualizado correctamente",
+            timer: 1000
+          });
         })
         .catch(function(error) {
           // The document probably doesn't exist.
@@ -181,6 +279,13 @@ export default {
       } else {
         return false;
       }
+    },
+    addTag() {
+      this.producto.tags.push(this.tag.substring(0, this.tag.length - 1));
+      this.tag = "";
+    },
+    removeTag(index) {
+      this.producto.tags.splice(index, 1);
     }
   },
   created() {
@@ -198,6 +303,12 @@ export default {
         });
       });
     });
+  },
+  firestore() {
+    // este usa una libreria especial para trabajar con firestore desde vue, esto no aparece como data
+    return {
+      products: db.collection("products")
+    };
   }
 };
 </script>
