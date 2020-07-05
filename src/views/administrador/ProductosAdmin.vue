@@ -5,51 +5,69 @@
       <h3 class="d-inline-block float-left">Lista de productos</h3>
       <button class="btn btn-primary float-right" @click="addNew">Agregar Producto</button>
     </div>
-
+    <div class="table-responsive">
     <table class="table">
       <thead class="thead-dark">
         <tr>
           <th scope="col">#</th>
           <th scope="col">Nombre</th>
           <th scope="col">Precio</th>
+          <th scope="col">Imagen</th>
           <th scope="col">Modificar</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(productoLoop,index) in productos" :key="index">
-          <td scope="row">{{index+1}}</td>
+        <tr v-for="(productoLoop,index) in productos" :key="index" >
           <td scope="row">
-            <div class="edit-off" v-show="!productoLoop.editOn">{{productoLoop.data().nombre}}</div>
-            <div class="edit-on col-lg-8" v-show="productoLoop.editOn">
+            <p class="col-lg">
+              {{index+1}}
+            </p>
+            </td>
+          <td scope="row">
+            <p class="edit-off col-lg" v-show="!productoLoop.editOn">{{productoLoop.data().nombre}}</p>
+            <div class="edit-on col-lg" v-show="productoLoop.editOn">
               <input type="text" class="form-control" v-model="producto.nombre" />
             </div>
           </td>
           <td scope="row">
-            <div class="edit-off" v-show="!productoLoop.editOn">{{productoLoop.data().precio}}</div>
-            <div class="edit-on col-lg-6" v-show="productoLoop.editOn">
+            <p class="edit-off col-lg" v-show="!productoLoop.editOn">{{productoLoop.data().precio}}</p>
+            <div class="edit-on col-lg" v-show="productoLoop.editOn">
               <input type="text" class="form-control" v-model="producto.precio" />
             </div>
           </td>
-          <td>
-            <button
-              @click="editarProducto(index)"
-              class="btn mx-2"
-              :class="{'btn-primary': !productoLoop.editOn}"
-              v-show="!productoLoop.editOn"
-              :disabled="isDisabled(index)"
-            >Editar</button>
-            <button
-              @click="updateData(index)"
-              class="btn mx-2"
-              :class="{'btn-warning': productoLoop.editOn}"
-              v-show="productoLoop.editOn"
-            >Guardar</button>
-
-            <button @click="borrarProducto(productoLoop.id)" class="btn btn-danger">Borrar</button>
+          <td scope="row">
+            <div class="col-lg">
+              <div class="">
+                <img
+                  :src="productoLoop.data().image"
+                  :alt="eone = 'no existe imagen'"
+                  class=" producto-imagen"
+                />
+              </div>
+            </div>
+          </td>
+          <td scope="row">
+            <div class="col-lg">
+              <button
+                @click="editarProducto(index)"
+                class="btn mx-2"
+                :class="{'btn-primary': !productoLoop.editOn}"
+                v-show="!productoLoop.editOn"
+                :disabled="isDisabled(index)"
+              >Editar</button>
+              <button
+                @click="updateData(index)"
+                class="btn mx-2"
+                :class="{'btn-warning': productoLoop.editOn}"
+                v-show="productoLoop.editOn"
+              >Guardar</button>
+              <button @click="borrarProducto(productoLoop.id)" class="btn btn-danger">Borrar</button>
+            </div>
           </td>
         </tr>
       </tbody>
     </table>
+    </div>
     <!-- Modal -->
     <div
       class="modal fade"
@@ -313,5 +331,10 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.producto-imagen {
+  /*width: 80%;*/
+  min-width: 150px;
+  max-height:200px;
+}
 </style>
