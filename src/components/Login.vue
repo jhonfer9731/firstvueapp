@@ -129,7 +129,7 @@
 </template>
 
 <script>
-import { fb } from "@/firebase.js"; // import only in this component
+import { fb,db } from "@/firebase.js"; // import only in this component
 export default {
   name: "Login",
   data() {
@@ -150,7 +150,14 @@ export default {
         fb.auth()
           .createUserWithEmailAndPassword(this.email, this.password)
           .then(user => {
-            console.log(user);
+            console.log(user.user.uid);
+            db.collection("profiles").doc(user.user.uid).set({
+              name: this.nombre
+            }).then(()=>{
+              console.log("Documento escrito Exitosamente");
+            }).catch((err)=>{
+              console.error(err);
+            });
             window.$("#login").modal("hide");
             this.$router.replace({ name: "Admin"});
           })

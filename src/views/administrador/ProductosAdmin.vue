@@ -99,7 +99,7 @@
               <p
                 class="edit-off col-lg"
                 v-show="!productoLoop.editOn"
-              >{{productoLoop.data().precio}}</p>
+              >{{productoLoop.data().precio | currency('$',0)}}</p>
               <div class="edit-on col-lg" v-show="productoLoop.editOn">
                 <input type="text" class="form-control" v-model="producto.precio" />
               </div>
@@ -125,7 +125,8 @@
                     v-model="tag"
                     @keyup.188="addTag"
                   />
-                  <div class="show-tags" v-if="producto.tags"><!-- se elimino .length -->
+                  <div class="show-tags" v-if="producto.tags">
+                    <!-- se elimino .length -->
                     <li
                       v-for="(tagProducto,index) in producto.tags"
                       :key="index"
@@ -162,7 +163,8 @@
                     v-model="variante"
                     @keyup.188="addVariante"
                   />
-                  <div class="show-tags" v-if="producto.variantes"> <!-- se elimino el .length -->
+                  <div class="show-tags" v-if="producto.variantes">
+                    <!-- se elimino el .length -->
                     <li
                       v-for="(varianteProducto,index) in producto.variantes"
                       :key="index"
@@ -178,13 +180,37 @@
               </div>
             </td>
             <td scope="row">
-              <div class="col-lg">
-                <div class>
-                  <img
-                    :src="productoLoop.data().image"
-                    :alt="alternative = 'no existe imagen'"
-                    class="producto-imagen"
-                  />
+              <div class="edit-off col-lg" v-show="!productoLoop.editOn">
+                <img
+                  :src="productoLoop.data().images[0]"
+                  :alt="alternative = 'no existe imagen'"
+                  class="producto-imagen"
+                />
+              </div>
+              <div class="edit-on col-lg" v-if="producto.images" v-show="productoLoop.editOn">
+                <ul class="list-unstyled">
+                  <li v-for="(imagen,index) in producto.images" :key="index" class="list-item card">
+                    <a href="#" @click="showImgModal(imagen)">Imagen{{index+1}}</a>
+                    <a href="#" @click="deleteImage(imagen,index)">
+                      <i class="fa fa-times-circle"></i>
+                    </a>
+                  </li>
+                </ul>
+                <div class="form-group">
+                  <label for="product_image">Agregar Imagen:  </label>
+                  <input type="file" @change="cargarImagen" class="form-control" />
+                  <div class="progress my-2" v-show="progresoCargaImg < 100 && progresoCargaImg >0">
+                    <div
+                      class="progress-bar"
+                      role="progressbar"
+                      :style="'width: '+progresoCargaImg+'%'"
+                      :aria-valuenow="progresoCargaImg"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                    >
+                      <span v-if="progresoCargaImg < 100 && progresoCargaImg > 0">Cargando Imagen...</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </td>
@@ -263,7 +289,8 @@
                       v-model="tag"
                       @keyup.188="addTag"
                     />
-                    <div class="show-tags" v-if="producto.tags"> <!-- se elimino el .length -->
+                    <div class="show-tags" v-if="producto.tags">
+                      <!-- se elimino el .length -->
                       <li
                         v-for="(tagProducto,index) in producto.tags"
                         :key="index"
@@ -284,7 +311,8 @@
                       v-model="variante"
                       @keyup.188="addVariante"
                     />
-                    <div class="show-tags" v-if="producto.variantes"> <!-- Se elimino el length -->
+                    <div class="show-tags" v-if="producto.variantes">
+                      <!-- Se elimino el length -->
                       <li
                         v-for="(varianteProducto,index) in producto.variantes"
                         :key="index"
@@ -300,7 +328,10 @@
                   <div class="form-group">
                     <label for="product_image">Imagenes Producto</label>
                     <input type="file" @change="cargarImagen" class="form-control" />
-                    <div class="progress my-2" v-show="progresoCargaImg < 100 && progresoCargaImg >0">
+                    <div
+                      class="progress my-2"
+                      v-show="progresoCargaImg < 100 && progresoCargaImg >0"
+                    >
                       <div
                         class="progress-bar"
                         role="progressbar"
@@ -308,9 +339,11 @@
                         :aria-valuenow="progresoCargaImg"
                         aria-valuemin="0"
                         aria-valuemax="100"
-                      ><span v-if="progresoCargaImg < 100 && progresoCargaImg > 0">Cargando Imagen...</span>
+                      >
+                        <span
+                          v-if="progresoCargaImg < 100 && progresoCargaImg > 0"
+                        >Cargando Imagen...</span>
                       </div>
-                      
                     </div>
                   </div>
                   <div class="form-group d-flex">
@@ -328,6 +361,19 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             <button type="button" class="btn btn-primary" @click="agregarProducto">Agregar Producto</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- showImgModal -->
+    <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="showImgInModalId">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <img :src="showImgInModal" alt="Error Imagen" />
           </div>
         </div>
       </div>
@@ -359,10 +405,15 @@ export default {
       activeItemId: null,
       tag: "",
       variante: "",
-      progresoCargaImg: 0
+      progresoCargaImg: 0,
+      showImgInModal: ""
     };
   },
   methods: {
+    showImgModal(imagen) {
+      this.showImgInModal = imagen;
+      window.$("#showImgInModalId").modal("show");
+    },
     deleteImage(img, index) {
       let image = fb.storage().refFromURL(img); //Se obtiene la referencia de la img como un objeto de donde esta ubicada en firebase
       this.producto.images.splice(index, 1);
@@ -387,8 +438,9 @@ export default {
           "state_changed",
           snapshot => {
             console.log(snapshot);
-            this.progresoCargaImg = snapshot.bytesTransferred*100/snapshot.totalBytes
-            console.log(this.progresoCargaImg)
+            this.progresoCargaImg =
+              (snapshot.bytesTransferred * 100) / snapshot.totalBytes;
+            console.log(this.progresoCargaImg);
           },
           error => {
             console.log(error);
@@ -404,19 +456,19 @@ export default {
       }
       //console.log(e.target.files[0])
     },
-    reset(){
+    reset() {
       this.producto = {
         nombre: null,
         precio: null,
         descripcion: null,
-        tags: [''],
+        tags: [""],
         image: null,
         images: [],
-        variantes: ['']
-      }
+        variantes: [""]
+      };
     },
     addNew() {
-      this.reset()
+      this.reset();
       window.$("#NuevoProducto").modal("show");
     },
     agregarProducto() {
@@ -577,5 +629,11 @@ export default {
 .img-wrapp span.delete-img:hover {
   cursor: pointer;
   font-weight: bold;
+}
+
+#showImgInModalId img {
+  position: relative;
+  object-fit: cover;
+  width: 100%;
 }
 </style>

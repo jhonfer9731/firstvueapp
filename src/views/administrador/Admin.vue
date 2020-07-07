@@ -22,7 +22,7 @@
                         <span class="user-name">Jhon
                             <strong>Smith</strong>
                         </span>
-                        <span class="user-role">Administrator</span>
+                        <span class="user-role">{{email}}</span>
                         <span class="user-status">
                             <i class="fa fa-circle"></i>
                             <span>Online</span>
@@ -91,6 +91,12 @@
                             </a>
                         </li>
                         <li>
+                            <router-link :to="{name: 'PerfilUser'}">
+                                <i class="fa fa-user"></i>
+                                <span class="menu-text">Perfil</span>
+                            </router-link>
+                        </li>
+                        <li>
                             <a href="#" @click="logout">
                                 <i class="fa fa-sign-out"></i>
                                 <span class="menu-text">Cerrar Sesion</span>
@@ -120,6 +126,12 @@ import {fb} from '@/firebase.js';
 window.$ = window.jQuery = jQuery;
 export default {
     name: "Admin",
+    data(){
+        return{
+            name: null,
+            email: null,
+        }
+    },
     methods:{
         closeMenu(){
             window.$('.page-wrapper').toggleClass('toggled');
@@ -131,6 +143,10 @@ export default {
                 })
             .catch((err) => console.log(err))
         }
+    },
+    created(){ // when the component is created I gonna get the currentUser info
+        var user = fb.auth().currentUser;
+        this.email = user.email; // we didn't provide the name so i gonna take the email
     }
 }
 </script>

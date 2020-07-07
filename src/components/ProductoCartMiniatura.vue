@@ -41,7 +41,6 @@ export default {
   watch: {
     infoProducto: function(newData){
       this.DatacantidadProducto = newData.cantidad
-      console.log(newData)
       this.infoDataProducto = this.infoProducto;      
     },
     cantidadProducto: function(){

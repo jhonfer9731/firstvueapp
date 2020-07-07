@@ -4,6 +4,8 @@ import router from './router'
 import jQuery from 'jquery';
 import VueFirestore from 'vue-firestore';
 Vue.use(VueFirestore)
+import Vue2Filters from 'vue2-filters'
+Vue.use(Vue2Filters)
 window.$ = window.jQuery = jQuery;
 import 'popper.js';
 import 'bootstrap';

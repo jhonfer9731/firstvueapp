@@ -11,8 +11,8 @@
       Carrito
       <span class="badge badge-light">{{productsAddedVariantId.length}}</span>
     </button>
-    <div class="dropdown-menu dropdown-menu-right p-4" aria-labelledby="dropDownMenuLink">
-      <div class="carrito-producto-envoltura" v-if="productsAdded !== null">
+    <div class="dropdown-menu dropdown-menu-right p-4" aria-labelledby="dropDownMenuLink" v-show="productsAddedVariantId.length">
+      <div class="carrito-producto-envoltura">
         <ProductoCartMiniatura
           v-for="(productAdded,index) in productsAdded"
           :key="index"
@@ -38,76 +38,60 @@ export default {
   data() {
     return {
       productsAddedVariantId: [],
-      cantidadPorRefData: {}
+      cantidadPorReferencia: {},
+      productsAdded: []
     };
   },
   methods: {
-    actualizarCarro(id) {
-      this.productsAddedVariantId.push(id);
+    actualizarCarro() {
+      this.productsAdded = []
+      Object.keys(this.cantidadPorReferencia).forEach(key => {
+        // itera sobre cada id que ha sido agregado lo que corresponde a cada elemento que fue añadido al carrito
+        const productoEncontrado = store.productos.filter(producto => {
+          // busca en cada producto de store.js
+          let incidencias = null;
+          producto.variante.every(function(varianteItem) {
+            // busca en cada variante que tenga el producto y ve si encuentra la variante con el id agregado
+            if (varianteItem.variantId.toString() === key)
+              incidencias = varianteItem; // si encuentra agrega a lista de incidencias
+            return false;
+          });
+          if (!incidencias) return false;
+          // si encontro incidencias el producto fue agregado y lo encontró
+          else {
+            return true;
+          }
+        });
+        productoEncontrado[0]["cantidad"] = this.cantidadPorReferencia[
+          key
+        ].toString(); // solo un producto tiene incidencias
+        const newProduct = Object.assign({}, productoEncontrado[0]); // solo funciona con ES6
+        this.productsAdded.push(newProduct); // se agrega el producto encontrado a la variable productsAdded
+      });
     }
   },
   props: {},
   created() {
+    // Se ejecuta apenas se crea el componente
     bus.$on("agregarCarrito", agregarIdProducto => {
-      //console.log("emitio");
       this.productsAddedVariantId.push(agregarIdProducto);
+      this.cantidadPorReferencia[agregarIdProducto] = this
+        .cantidadPorReferencia[agregarIdProducto]
+        ? this.cantidadPorReferencia[agregarIdProducto] + 1
+        : 1;
+      this.actualizarCarro();
     });
   },
   computed: {
-    productsAdded() {
-      const productos = [];
-      const varianteDetalles = [];
-      Object.keys(this.cantidadPorRef).forEach( key => {
-        // itera sobre cada id que ha sido agregado lo que corresponde a cada elemento que fue añadido al carrito
-        const productoEncontrado = store.productos.filter(producto => {
-          // busca en cada producto de store.js
-          //console.log(producto.nombre)
-          const incidencias = [];
-          producto.variante.forEach(varianteItem => {
-            // busca en cada variante que tenga el producto y ve si encuentra la variante con el id agregado
-            if ((varianteItem.variantId).toString() === key)
-              incidencias.push(varianteItem); // si encuentra agrega a lista de incidencias
-          });
-          //console.log('itero');
-          if (incidencias.length == 0) return false;
-          // si encontro incidencias el producto fue agregado y lo encontró
-          else{
-            varianteDetalles.push(incidencias[0]);
-            return true;
-          } 
-        });
-        //productoEncontrado[0].variante = varianteDetalles;
-        productoEncontrado[0]['cantidad'] = this.cantidadPorRef[key].toString();
-        
-        const newProduct = Object.assign({},productoEncontrado[0]) // solo funciona con ES6
-        console.log(newProduct)
-        productos.push(newProduct); // se agrega el producto encontrado a la variable productos
-      })
-      //console.log(productos);
-      if (!productos) {
-        return null;
-      } else {
-        return productos; // retorna los productos añadidos
-      }
-    },
-    cantidadPorRef(){
-      const cantidadPorRefObj = {}
-      for(let i = 0; i<this.productsAddedVariantId.length;i++){
-        const VariantId = this.productsAddedVariantId[i];
-        cantidadPorRefObj[VariantId] = cantidadPorRefObj[VariantId] ? cantidadPorRefObj[VariantId]+1 : 1;
-      }
-      return cantidadPorRefObj;
-    }
   }
 };
 </script>
 
 <style scoped>
-
 .dropdown-menu {
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
-.carrito-producto-envoltura{
+.carrito-producto-envoltura {
   min-width: 250px;
 }
 </style>
