@@ -13,6 +13,11 @@ import './assets/app.scss';
 import {fb} from '@/firebase.js';
 import Swal from 'sweetalert2';
 
+// window.$(document).ready(function() {
+//   window.$(".dropdown-toggle").dropdown();
+// });
+
+
 /* Swal */
 
 
@@ -36,6 +41,7 @@ window.Toast = window.Swal.mixin({
 Vue.config.productionTip = false
 
 export const bus = new Vue();
+import store2 from '@/store2.js'; // vuex state management
 
 let app = null;
 // Way to get the current User by setting an observer on the Auth Object
@@ -44,6 +50,7 @@ fb.auth().onAuthStateChanged(function (){
   if(!app){ // it renders the app until the callback is executed
     new Vue({
       router,
+      store: store2,
       render: h => h(App)
     }).$mount('#app')
   }

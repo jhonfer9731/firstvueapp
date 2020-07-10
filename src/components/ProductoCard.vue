@@ -14,6 +14,7 @@
         <ul class="detalles">
           <li v-for="(detalle,index) in producto.detalles" :key="index">{{detalle}}</li>
         </ul>
+        <p class="card-text precioProducto">{{producto.precio | currency('$',0,{ thousandsSeparator: '.' })}} </p>
         <button class="btn btn-success" @click="agregarCarrito">Agregar</button>
         <button class="btn btn-secondary">Detalles</button>
       </div>
@@ -37,8 +38,13 @@ export default {
   },
   methods:{
     agregarCarrito(){
+      window.$('.dropdown-menu').toggleClass('show')
+      setTimeout(()=>{
+        window.$('.dropdown-menu').toggleClass('show')
+      },1800)
       bus.$emit('agregarCarrito',this.agregarIdProducto);
-      console.log(this.agregarIdProducto);
+      //console.log(this.agregarIdProducto);
+      this.$store.commit('addToCart',this.producto) // primero el nombre de la mutation y luego el parametro
     }
   }
 };
@@ -52,7 +58,7 @@ export default {
   font-size: 1.2rem;
 }
 .card {
-  min-height: 650px;
+  min-height: 680px;
 }
 .card-img-top {
   max-width: 80%;

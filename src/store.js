@@ -1,8 +1,10 @@
 export default{
     productos : [
         {
+            productoId: "p1",
             nombre: 'medias',
             marca: 'JFBrand',
+            precio: '15000',
             selectedVariant: 0,
             detalles: ['80% Algodon', '20% Polyester', 'Genero-neutral'],
             variante: [
@@ -21,8 +23,10 @@ export default{
             ]
         },
         {
+            productoId: "p2",
             nombre: 'Pantalon-relaxer',
             marca: 'JFBrand',
+            precio: '45000',
             selectedVariant: 0,
             detalles: ['90% Algodon', '10% Polyester', 'Genero-masculino'],
             variante: [
@@ -35,8 +39,10 @@ export default{
             ]
         },
         {
+            productoId: "p3",
             nombre: 'Camisa-relaxer',
             marca: 'JFBrand',
+            precio: '33000',
             selectedVariant: 0,
             detalles: ['90% Algodon', '10% Polyester', 'Genero-masculino'],
             variante: [
@@ -49,8 +55,10 @@ export default{
             ]
         },
         {
+            productoId: "p4",
             nombre: 'Zapatos Deportivos-relaxer',
             marca: 'JFBrand',
+            precio: '150000',
             selectedVariant: 0,
             detalles: ['90% Algodon', '10% Polyester', 'Genero-masculino'],
             variante: [
@@ -63,8 +71,10 @@ export default{
             ]
         },
         {
+            productoId: "p5",
             nombre: 'Zapatos-relaxer',
             marca: 'JFBrand',
+            precio: '120000',
             selectedVariant: 0,
             detalles: ['90% Algodon', '10% Polyester', 'Genero-masculino'],
             variante: [
@@ -77,8 +87,10 @@ export default{
             ]
         },
         {
+            productoId: "p6",
             nombre: 'Camiseta-relaxer',
             marca: 'JFBrand',
+            precio: '20000',
             selectedVariant: 0,
             detalles: ['90% Algodon', '10% Polyester', 'Genero-masculino'],
             variante: [
