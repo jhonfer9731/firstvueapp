@@ -35,6 +35,11 @@ const routes = [
         name: 'Registro',
         component: () => import(/* webpackChunkName: "registro" */ '../views/Registro.vue')
       },
+      {
+        path: 'confirmacioncompra',
+        name: 'confirmacionCompra',
+        component: () => import(/* webpackChunkName: "confirmacionCompra" */ '../views/cliente/ConfirmacionCompra.vue')
+      },
     ]
   },
   {

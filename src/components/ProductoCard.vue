@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import {bus} from '@/main.js';
+//import {bus} from '@/main.js';
 export default {
   name: "ProductoCard",
   props: {
@@ -38,13 +38,23 @@ export default {
   },
   methods:{
     agregarCarrito(){
-      window.$('.dropdown-menu').toggleClass('show')
-      setTimeout(()=>{
-        window.$('.dropdown-menu').toggleClass('show')
-      },1800)
-      bus.$emit('agregarCarrito',this.agregarIdProducto);
+      // window.$('.dropdown-menu').toggleClass('show')
+      // setTimeout(()=>{
+      //   window.$('.dropdown-menu').toggleClass('show')
+      // },1800)
+      //bus.$emit('agregarCarrito',this.agregarIdProducto);
       //console.log(this.agregarIdProducto);
       this.$store.commit('addToCart',this.producto) // primero el nombre de la mutation y luego el parametro
+      window.Toast.fire({
+            icon: "success",
+            title: "Producto Agregado al carrito de compras",
+            timer: 2000,
+            position: 'bottom-end',
+          });
+      this.$store.commit('enfatizarCarritoBoton',true)
+      setTimeout(()=>{
+        this.$store.commit('enfatizarCarritoBoton',false)
+      },500)
     }
   }
 };

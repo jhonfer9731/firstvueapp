@@ -40,7 +40,7 @@ window.Toast = window.Swal.mixin({
 
 Vue.config.productionTip = false
 
-export const bus = new Vue();
+//export const bus = new Vue();
 import store2 from '@/store2.js'; // vuex state management
 
 let app = null;
