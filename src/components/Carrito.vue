@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     pagoCompra() {
-      this.$router.replace({ name: "confirmacionCompra" });
+      this.$router.push({ name: "confirmacionCompra" });
     }
     /*
     actualizarCarro() {

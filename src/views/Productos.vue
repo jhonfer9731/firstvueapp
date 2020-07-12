@@ -5,6 +5,14 @@
                     <ProductoCard :producto="producto" class="mb-4"  />
             </div>
         </div>
+        <div class="row">
+            <div v-for="(producto,index) in todosProductos" :key="index" class="col-md-12 text-left">
+                <pre>{{producto}}</pre>
+                <!--
+                <ProductoCard :producto="producto" class="mb-4" />
+                -->
+            </div>
+        </div>
     </div>
     
         
@@ -13,6 +21,7 @@
 <script>
 import store from '@/store.js';
 import ProductoCard from '@/components/ProductoCard';
+import {mapGetters, mapActions} from 'vuex';
 export default {
     name : 'Productos',
     components: {
@@ -24,9 +33,13 @@ export default {
         }
     },
     methods :{
-        emitirSenalCar(algo){
-            console.log(algo)
-        }
+        ...mapActions(['obtenerStock'])
+    },
+    computed:{
+        ...mapGetters(['todosProductos'])
+    },
+    created(){
+        this.obtenerStock();
     }
 }
 </script>

@@ -1,12 +1,25 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import stockProductos from '@/modules/stock';
 Vue.use(Vuex)
+
+ // provisional con localstorage
+let cartProducts = window.localStorage.getItem('cartProducts')
+let cartSaldoTotal = window.localStorage.getItem('cartSaldoTotal')
+let count = window.localStorage.getItem('count')
+
+
+
 export default new Vuex.Store({
+    modules:{
+        stockProductos
+    },
     state: {
-        count: 0, // the data I store,
-        cartProducts: [],
-        cartSaldoTotal: 0,
+        count: count ? JSON.parse(count) : 0, // the data I store,
+        cartProducts: cartProducts ? JSON.parse(cartProducts) : [],
+        cartSaldoTotal: cartSaldoTotal ? JSON.parse(cartSaldoTotal) : 0,
         agregoProductoBandera: false,
+        encenderOpacidad: false,
     },
     mutations: {
         addToCart(state, item) { // primero se coloca el state como parametro y luego el item que se llama desde el commit en cualquier componente
@@ -32,11 +45,13 @@ export default new Vuex.Store({
             //console.log(productoCopia.precio)
             state.cartSaldoTotal += parseInt(state.cartProducts[state.cartProducts.length - 1].precio, 10);
             state.count++;
+            this.commit('guardarDatosLocal');
         },
         eliminarDeCarrito(state, infoproductoId) {
             const updatedProducts = state.cartProducts.filter((value) => {
                 return !(value.productoId === infoproductoId.productoId && value.variante.variantId === infoproductoId.varianteId)
             });
+            console.log(updatedProducts)
             state.cartProducts = updatedProducts;
             let sumaPrecios = 0;
             state.count = 0
@@ -47,6 +62,7 @@ export default new Vuex.Store({
                 }
             );
             state.cartSaldoTotal = sumaPrecios
+            this.commit('guardarDatosLocal');
         },
         enfatizarCarritoBoton(state, agregoProductoBandera) {
             state.agregoProductoBandera = agregoProductoBandera
@@ -67,7 +83,27 @@ export default new Vuex.Store({
                 );
                 state.cartSaldoTotal = sumaPrecios
             }
+            this.commit('guardarDatosLocal');
 
+        },
+        guardarDatosLocal(state){
+            window.localStorage.setItem('cartProducts',JSON.stringify(state.cartProducts));
+            window.localStorage.setItem('cartSaldoTotal',JSON.stringify(state.cartSaldoTotal));
+            window.localStorage.setItem('count',JSON.stringify(state.count));
+        },
+        encendedorOpacidad(state){
+            state.encenderOpacidad = true;
+        },
+        apagadorOpacidad(state){
+            state.encenderOpacidad = false;
+        }
+    },
+    actions: {
+        cambiarOpacidad(context){
+            setTimeout(()=>{
+                context.commit('encendedorOpacidad');
+            },1000);
+            
         }
     }
 })

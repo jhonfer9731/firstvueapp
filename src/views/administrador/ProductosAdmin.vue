@@ -85,10 +85,10 @@
                       <p
                         class="edit-off col-lg"
                         v-show="!productoLoop.editOn"
-                        v-html="productoLoop.data().descripcion"
+                        v-html="productoLoop.data().detalles"
                       ></p>
                       <div class="edit-on col-lg" v-show="productoLoop.editOn">
-                        <VueEditor v-model="producto.descripcion" />
+                        <VueEditor v-model="producto.detalles" />
                       </div>
                     </div>
                   </div>
@@ -197,7 +197,7 @@
                   </li>
                 </ul>
                 <div class="form-group">
-                  <label for="product_image">Agregar Imagen:  </label>
+                  <label for="product_image">Agregar Imagen:</label>
                   <input type="file" @change="cargarImagen" class="form-control" />
                   <div class="progress my-2" v-show="progresoCargaImg < 100 && progresoCargaImg >0">
                     <div
@@ -236,7 +236,12 @@
         </tbody>
       </table>
     </div>
-    <!-- Modal -->
+
+    <!-- Agregar Producto -->
+    <!-- Modal para agregar un producto  -->
+
+
+
     <div
       class="modal fade"
       id="NuevoProducto"
@@ -266,7 +271,7 @@
                     />
                   </div>
                   <div class="form-group">
-                    <VueEditor v-model="producto.descripcion" />
+                    <VueEditor v-model="producto.detalles" />
                   </div>
                 </div>
 
@@ -395,7 +400,7 @@ export default {
       producto: {
         nombre: null,
         precio: null,
-        descripcion: null,
+        detalles: null,
         tags: [],
         image: null,
         images: [],
@@ -403,8 +408,8 @@ export default {
       },
       activeItemIndex: null /*Se selecciona un item para editar*/,
       activeItemId: null,
-      tag: "",
-      variante: "",
+      tag: "", // estan conectados por el v-model a los input respectivos
+      variante: "", // estan conectados por el v-model a los input respectivos
       progresoCargaImg: 0,
       showImgInModal: ""
     };
@@ -437,10 +442,10 @@ export default {
         uploadTask.on(
           "state_changed",
           snapshot => {
-            console.log(snapshot);
+            //console.log(snapshot);
             this.progresoCargaImg =
               (snapshot.bytesTransferred * 100) / snapshot.totalBytes;
-            console.log(this.progresoCargaImg);
+            //console.log(this.progresoCargaImg);
           },
           error => {
             console.log(error);
@@ -460,7 +465,7 @@ export default {
       this.producto = {
         nombre: null,
         precio: null,
-        descripcion: null,
+        detalles: null,
         tags: [""],
         image: null,
         images: [],
@@ -487,9 +492,6 @@ export default {
         });*/
       this.$firestore.products.add(this.producto);
       window.$("#NuevoProducto").modal("hide");
-    },
-    cleanData() {
-      //Object.assign(this.$data, this.$options.data.apply(this));
     },
     readData() {
       this.productos = [];
@@ -585,7 +587,7 @@ export default {
     }
   },
   created() {
-    this.readData();
+    //this.readData();
   },
   computed: {},
   mounted() {

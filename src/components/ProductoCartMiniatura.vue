@@ -18,7 +18,7 @@
           <p class="d-block producto-nombre">{{dataInfoProducto.nombre}}</p>
           <small class="d-block">Marca: {{dataInfoProducto.marca}}</small>
           <small class="d-block">
-            Cantidad: 
+            Cantidad:
             <!-- Cantidad: {{dataInfoProducto.cantidadProducto}} -->
             <div class="form-group row m-0">
               <div class="col-sm-5 d-flex p-0">
@@ -83,17 +83,12 @@ export default {
         if (simbolo === "+") {
           this.cantidadProducto++;
         } else {
-          if (this.cantidadProducto) {
             if (this.cantidadProducto > 1) {
               this.cantidadProducto--;
             } else if (this.cantidadProducto <= 1) {
               this.eliminarProductoCarrito();
             }
-          }
         }
-      }
-      if (this.cantidadProducto) {
-        console.log(simbolo);
         this.$store.commit("cambiarCantidadProductos", {
           productoId: this.dataInfoProducto.productoId,
           varianteId: this.dataInfoProducto.variante.variantId,

@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <!-- <TheNavigation /> -->
-    <router-view :key="$route.path"/>
+    <transition name="fade">
+      <router-view :key="$route.path" />
+    </transition>
     <!-- <TheFooter /> -->
   </div>
 </template>
@@ -10,16 +12,28 @@
 //import TheNavigation from "@/components/TheNavigation";
 //import TheFooter from "@/components/TheFooter";
 export default {
-  components:{
+  components: {
     //TheNavigation,
     //TheFooter
   },
-  methods:{
-    consoleLog(agregarIdProducto){
-      console.log(agregarIdProducto)
+  data() {
+    return {
+      transitionName: undefined
+    };
+  },
+  methods: {
+    consoleLog(agregarIdProducto) {
+      console.log(agregarIdProducto);
+    }
+  },
+  watch: {
+    $route(to, from) {
+      const toDepth = to.path.split("/").length;
+      const fromDepth = from.path.split("/").length;
+      this.transitionName = toDepth < fromDepth ? "slide-right" : "slide-left";
     }
   }
-}
+};
 </script>
 
 <style lang="scss">
@@ -40,7 +54,29 @@ export default {
   color: #42b983;
 }
 
-a:hover{
+a:hover {
   text-decoration: none;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+.fade-enter,
+.fade-leave {
+  opacity: 0;
+}
+
+.slide-left-enter,
+.slide-right-leave-active {
+  opacity: 0;
+  -webkit-transform: translate(30px, 0);
+  transform: translate(30px, 0);
+}
+.slide-left-leave-active,
+.slide-right-enter {
+  opacity: 0;
+  -webkit-transform: translate(-30px, 0);
+  transform: translate(-30px, 0);
 }
 </style>
