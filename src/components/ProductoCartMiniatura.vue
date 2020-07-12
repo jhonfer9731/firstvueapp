@@ -8,7 +8,7 @@
         <img
           class
           :alt="dataInfoProducto.nombre"
-          :src="require(`@/assets/images/${dataInfoProducto.variante.variantImage}`)"
+          :src="dataInfoProducto.variante.variantImage"
           width="100px"
           height="100px"
         />

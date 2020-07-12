@@ -1,16 +1,13 @@
 <template>
     <div class="container my-5">
-        <div class="row">
+        <!-- <div class="row">
             <div v-for="(producto,index) in productos" :key="index" class="col-md-4">
                     <ProductoCard :producto="producto" class="mb-4"  />
             </div>
-        </div>
+        </div> -->
         <div class="row">
-            <div v-for="(producto,index) in todosProductos" :key="index" class="col-md-12 text-left">
-                <pre>{{producto}}</pre>
-                <!--
+            <div v-for="(producto,index) in todosProductos" :key="index" class="col-md-4">
                 <ProductoCard :producto="producto" class="mb-4" />
-                -->
             </div>
         </div>
     </div>

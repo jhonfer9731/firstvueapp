@@ -1,19 +1,24 @@
 <template>
   <div class="card d-flex flex-column">
     <div class="contenidoFlex d-flex justify-content-center align-items-center mt-2">
-      <img
+      <!-- <img
         class="card-img-top col"
         :alt="producto.nombre"
         :src="require(`@/assets/images/${producto.variante[0].variantImage}`)"
+      /> -->
+      <img
+        class="card-img-top col"
+        :alt="producto.nombre"
+        :src="producto.variante[0].variantImage"
       />
     </div>
     <div class="contenidoFlex mt-auto">
       <h3 class="card-header">{{producto.nombre}}</h3>
       <div class="card-body">
         <p class="card-text">Marca: {{producto.marca}}</p>
-        <ul class="detalles">
-          <li v-for="(detalle,index) in producto.detalles" :key="index">{{detalle}}</li>
-        </ul>
+        <!-- <ul class="detalles">
+           <li v-for="(detalle,index) in producto.detalles" :key="index">{{detalle}}</li> 
+        </ul> -->
         <p class="card-text precioProducto">{{producto.precio | currency('$',0,{ thousandsSeparator: '.' })}} </p>
         <button class="btn btn-success" @click="agregarCarrito">Agregar</button>
         <button class="btn btn-secondary">Detalles</button>

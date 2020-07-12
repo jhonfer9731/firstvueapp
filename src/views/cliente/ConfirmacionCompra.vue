@@ -10,7 +10,7 @@
             </a>
             <div class="ancho-imagen">
               <img
-                :src="require(`@/assets/images/${item.variante.variantImage}`)"
+                :src="item.variante.variantImage"
                 alt="No hay imagen"
                 class="align-self-center mr-3"
               />
@@ -47,7 +47,9 @@
       </div>
       <div class="col-md-3">
         <h4 class>Precio total</h4>
-        <p class="text-center precio-total">{{precioTotal | currency('$',0,{ thousandsSeparator: '.' })}}</p>
+        <p
+          class="text-center precio-total"
+        >{{precioTotal | currency('$',0,{ thousandsSeparator: '.' })}}</p>
       </div>
     </div>
     <div class="card">
@@ -67,12 +69,14 @@ export default {
   methods: {
     eliminarProductoCarrito(index) {
       //console.log("Variante", this.dataInfoProducto.variante.variantId)
-      console.log(this.itemsCarrito[index]);
-      this.$store.commit("eliminarDeCarrito", {
-        productoId: this.itemsCarrito[index].productoId,
-        varianteId: this.itemsCarrito[index].variante.variantId
-      });
-      this.itemsCarrito = this.$store.state.cartProducts;
+      if (this.itemsCarrito[index]) {
+        console.log(this.itemsCarrito[index]);
+        this.$store.commit("eliminarDeCarrito", {
+          productoId: this.itemsCarrito[index].productoId,
+          varianteId: this.itemsCarrito[index].variante.variantId
+        });
+        this.itemsCarrito = this.$store.state.cartProducts;
+      }
     },
     cambiarCantidadProducto(simbolo, index) {
       //this.itemsCarrito[index].cantidadProducto = this.infoProducto.itemsCarrito[index].cantidadProducto;
@@ -86,18 +90,20 @@ export default {
             this.eliminarProductoCarrito(index);
           }
         }
-        this.$store.commit("cambiarCantidadProductos", {
-          productoId: this.itemsCarrito[index].productoId,
-          varianteId: this.itemsCarrito[index].variante.variantId,
-          cantidadActual: this.itemsCarrito[index].cantidadProducto,
-        });
+        if (this.itemsCarrito[index]) {
+          this.$store.commit("cambiarCantidadProductos", {
+            productoId: this.itemsCarrito[index].productoId,
+            varianteId: this.itemsCarrito[index].variante.variantId,
+            cantidadActual: this.itemsCarrito[index].cantidadProducto
+          });
+        }
       }
     }
   },
-  computed:{
+  computed: {
     precioTotal() {
       return this.$store.state.cartSaldoTotal;
-    },
+    }
   }
 };
 </script>
@@ -121,7 +127,7 @@ export default {
 i {
   color: #3c4753;
 }
-.precio-total{
+.precio-total {
   font-weight: bold;
   font-size: 1.5rem;
 }

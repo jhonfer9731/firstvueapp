@@ -34,33 +34,6 @@
               </div>
             </td>
             <td scope="row">
-              <!--
-              <div :id="'accordion'+index">
-                <div class="card">
-                  <div class id="headingDescripcion">
-                    <h5 class="mb-0">
-                      <button
-                        class="btn btn-link"
-                        data-toggle="collapse"
-                        :data-target="'#'+index+'-acordeon'"
-                        aria-expanded="true"
-                        :aria-controls="index+'-acordeon'"
-                      >Ver Detalles</button>
-                    </h5>
-                  </div>
-                  <div
-                    :id="index+'-acordeon'"
-                    class="collapse show"
-                    aria-labelledby="headingDescripcion"
-                    :data-parent="'accordion'+index"
-                  >
-                    <div class="card-body">
-                      
-                    </div>
-                  </div>
-                </div>
-              </div>
-              -->
               <div :id="'accordion-'+index">
                 <div class="card">
                   <div class="card-header" :id="'heading'+index">
@@ -240,8 +213,6 @@
     <!-- Agregar Producto -->
     <!-- Modal para agregar un producto  -->
 
-
-
     <div
       class="modal fade"
       id="NuevoProducto"
@@ -262,6 +233,7 @@
             <div class="container-fuid">
               <div class="row">
                 <div class="col-lg-8">
+                  <!--Primera Columna Modal -->
                   <div class="form-group">
                     <input
                       class="form-control"
@@ -272,6 +244,66 @@
                   </div>
                   <div class="form-group">
                     <VueEditor v-model="producto.detalles" />
+                  </div>
+                  <hr />
+                  <h4>Variantes</h4>
+                  <div class="form-group variante-form-group my-3">
+                    <input
+                      type="text"
+                      placeholder="Color Variante"
+                      v-model="variantColor"
+                      class="form-control mb-2"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Referencia(ID)"
+                      v-model="variantId"
+                      class="form-control mb-2"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Cantidad Disponible"
+                      v-model="variantQuantity"
+                      class="form-control mb-2"
+                    />
+                    <div class="row">
+                      <div class="col d-flex justify-content-end align-items-center">
+                        <label class="text-right" for="imagenVarianteModal">Imagen Variante:</label>
+                      </div>
+                      <div class="col d-flex justify-content-start">
+                        <input
+                          type="file"
+                          @change="cargarImagen"
+                          class="form-control"
+                          id="imagenVarianteModal"
+                          name="imagenVarianteModal"
+                        />
+                        <div
+                          class="progress my-2"
+                          v-show="progresoCargaImg < 100 && progresoCargaImg >0"
+                        >
+                          <div
+                            class="progress-bar"
+                            role="progressbar"
+                            :style="'width: '+progresoCargaImg+'%'"
+                            :aria-valuenow="progresoCargaImg"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                          >
+                            <span
+                              v-if="progresoCargaImg < 100 && progresoCargaImg > 0"
+                            >Cargando Imagen...</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-end">
+                    <button
+                      class="btn btn-primary m-2"
+                      @click="agregarVarianteDeProducto"
+                    >Agregar Variante</button>
+                    <!-- Permite agregar una nueva variante del producto -->
                   </div>
                 </div>
 
@@ -284,6 +316,14 @@
                       type="text"
                       placeholder="Precio"
                       v-model="producto.precio"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <input
+                      class="form-control"
+                      type="text"
+                      placeholder="Marca"
+                      v-model="producto.marca"
                     />
                   </div>
                   <div class="form-group">
@@ -400,18 +440,26 @@ export default {
       producto: {
         nombre: null,
         precio: null,
+        marca: null,
         detalles: null,
         tags: [],
         image: null,
         images: [],
-        variantes: []
+        variantes: [],
+        variante: [],
+        productoId: null,
+        selectedVariant: 0
       },
       activeItemIndex: null /*Se selecciona un item para editar*/,
       activeItemId: null,
       tag: "", // estan conectados por el v-model a los input respectivos
       variante: "", // estan conectados por el v-model a los input respectivos
       progresoCargaImg: 0,
-      showImgInModal: ""
+      showImgInModal: "",
+      variantColor: null,
+      variantId: null,
+      variantImage: null,
+      variantQuantity: null
     };
   },
   methods: {
@@ -455,6 +503,7 @@ export default {
             uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
               this.producto.image = downloadURL;
               this.producto.images.push(downloadURL);
+              this.variantImage = downloadURL;
             });
           }
         );
@@ -465,11 +514,15 @@ export default {
       this.producto = {
         nombre: null,
         precio: null,
+        marca: null,
         detalles: null,
         tags: [""],
         image: null,
         images: [],
-        variantes: [""]
+        variantes: [""],
+        variante: [],
+        productoId: null,
+        selectedVariant: 0
       };
     },
     addNew() {
@@ -477,21 +530,25 @@ export default {
       window.$("#NuevoProducto").modal("show");
     },
     agregarProducto() {
-      /*db.collection("products")
+      db.collection("products")
         .add(this.producto)
         .then(docRef => {
-          console.log("Document written with ID: ", docRef.id);
-          this.producto.nombre = "";
-          this.producto.precio = "";
-          //this.readData();
-          this.cleanData();
+          //console.log("Document written with ID: ", docRef.id);
+          this.producto.productoId = docRef.id;
           window.$("#NuevoProducto").modal("hide");
+          db.collection("products")
+            .doc(this.producto.productoId)
+            .update(this.producto)
+            .then(function() {})
+            .catch(function(error) {
+              console.error("Error actualizando documento: ", error);
+            });
         })
         .catch(function(error) {
           console.error("Error adding document: ", error);
-        });*/
-      this.$firestore.products.add(this.producto);
-      window.$("#NuevoProducto").modal("hide");
+        });
+      //this.$firestore.products.add(this.producto);
+      //window.$("#NuevoProducto").modal("hide");
     },
     readData() {
       this.productos = [];
@@ -584,6 +641,18 @@ export default {
     },
     removeVariante(index) {
       this.producto.variantes.splice(index, 1);
+    },
+    agregarVarianteDeProducto() {
+      this.producto.variante.push({
+        variantId: parseInt(this.variantId),
+        variantColor: this.variantColor,
+        variantImage: this.variantImage,
+        variantQuantity: parseInt(this.variantQuantity)
+      });
+      this.variantId = '';
+      this.variantColor = '';
+      this.variantImage = '';
+      this.variantQuantity = '';
     }
   },
   created() {
@@ -616,6 +685,9 @@ export default {
   /*width: 80%;*/
   min-width: 150px;
   max-height: 150px;
+}
+.variante-form-group {
+  width: 80%;
 }
 
 .img-wrapp {
