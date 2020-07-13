@@ -11,7 +11,7 @@
           <tr>
             <th scope="col-lg">#</th>
             <th scope="col-lg">Nombre</th>
-            <th scope="col-lg">Descripción</th>
+            <th scope="col-lg">Detalles</th>
             <th scope="col-lg">Precio</th>
             <th scope="col-lg">Tags</th>
             <th scope="col-lg">Variantes</th>
@@ -21,9 +21,11 @@
         </thead>
         <tbody>
           <tr v-for="(productoLoop,index) in productos" :key="index">
+            <!-- index -->
             <td scope="row">
               <p class="col-lg">{{index+1}}</p>
             </td>
+            <!-- nombre -->
             <td scope="row">
               <p
                 class="edit-off col-lg"
@@ -33,6 +35,7 @@
                 <input type="text" class="form-control" v-model="producto.nombre" />
               </div>
             </td>
+            <!-- detalles -->
             <td scope="row">
               <div :id="'accordion-'+index">
                 <div class="card">
@@ -68,6 +71,7 @@
                 </div>
               </div>
             </td>
+            <!-- precio -->
             <td scope="row">
               <p
                 class="edit-off col-lg"
@@ -77,6 +81,7 @@
                 <input type="text" class="form-control" v-model="producto.precio" />
               </div>
             </td>
+            <!-- tags -->
             <td scope="row">
               <div
                 class="show-tags edit-off col-lg"
@@ -114,36 +119,31 @@
                 </div>
               </div>
             </td>
+            <!-- variantes -->
             <td scope="row">
               <div
                 class="show-tags edit-off col-lg"
-                v-if="productoLoop.data().variantes"
+                v-if="productoLoop.data().variante"
                 v-show="!productoLoop.editOn"
               >
+                <!-- se muestra solo cuando se quiere mostrar -->
                 <!-- tiene que ser sin el length ya que algunos no tienen el parametro variantes -->
                 <li
-                  v-for="(varianteProducto,index) in productoLoop.data().variantes"
+                  v-for="(varianteProducto,index) in productoLoop.data().variante"
                   :key="index"
                   class="d-inline-block m-2 border px-1"
-                >{{varianteProducto}}</li>
+                >{{varianteProducto.variantId}}</li>
               </div>
+              <!-- se muestra solo cuando se quiere editar -->
               <div class="edit-on col-lg" v-show="productoLoop.editOn">
                 <div class="form-group">
-                  <input
-                    class="form-control"
-                    type="text"
-                    placeholder="Variantes"
-                    v-model="variante"
-                    @keyup.188="addVariante"
-                  />
-                  <div class="show-tags" v-if="producto.variantes">
-                    <!-- se elimino el .length -->
+                  <div class="show-tags" v-if="producto.variante">
                     <li
-                      v-for="(varianteProducto,index) in producto.variantes"
+                      v-for="(varianteProducto,index) in producto.variante"
                       :key="index"
                       class="d-inline-block m-2 border px-1"
                     >
-                      {{varianteProducto}}
+                      {{varianteProducto.variantId}}
                       <a href="#" @click="removeVariante(index)">
                         <i class="fa fa-times-circle" aria-hidden="true"></i>
                       </a>
@@ -152,19 +152,20 @@
                 </div>
               </div>
             </td>
+            <!-- imagenes -->
             <td scope="row">
               <div class="edit-off col-lg" v-show="!productoLoop.editOn">
                 <img
-                  :src="productoLoop.data().images[0]"
+                  :src="productoLoop.data().variante[0].variantImage"
                   :alt="alternative = 'no existe imagen'"
                   class="producto-imagen"
                 />
               </div>
-              <div class="edit-on col-lg" v-if="producto.images" v-show="productoLoop.editOn">
+              <div class="edit-on col-lg" v-if="producto.variante" v-show="productoLoop.editOn">
                 <ul class="list-unstyled">
-                  <li v-for="(imagen,index) in producto.images" :key="index" class="list-item card">
-                    <a href="#" @click="showImgModal(imagen)">Imagen{{index+1}}</a>
-                    <a href="#" @click="deleteImage(imagen,index)">
+                  <li v-for="(variante,index) in producto.variante" :key="index" class="list-item card">
+                    <a href="#" @click="showImgModal(variante.variantImage)">Imagen{{index+1}}</a>
+                    <a href="#" @click="deleteImage(variante.variantImage,index)">
                       <i class="fa fa-times-circle"></i>
                     </a>
                   </li>
@@ -187,6 +188,7 @@
                 </div>
               </div>
             </td>
+            <!-- Botones editar y borrar -->
             <td scope="row">
               <div class="col-lg">
                 <button
@@ -232,8 +234,10 @@
           <div class="modal-body">
             <div class="container-fuid">
               <div class="row">
+                <!-- columna 1 -->
                 <div class="col-lg-8">
                   <!--Primera Columna Modal -->
+                  <!-- nombre -->
                   <div class="form-group">
                     <input
                       class="form-control"
@@ -242,10 +246,12 @@
                       v-model="producto.nombre"
                     />
                   </div>
+                  <!-- detalles -->
                   <div class="form-group">
                     <VueEditor v-model="producto.detalles" />
                   </div>
                   <hr />
+                  <!-- agregar variante -->
                   <h4>Variantes</h4>
                   <div class="form-group variante-form-group my-3">
                     <input
@@ -297,7 +303,21 @@
                         </div>
                       </div>
                     </div>
+                    <div class="p-1 form-group d-flex" v-if="variantImage">
+                      <div class="img-wrapp">
+                        <span class="delete-img" @click="borrarImagenUnidad(variantImage)">x</span>
+                        <img :src="variantImage" alt="Error" width="80px" />
+                      </div>
+                    </div>
                   </div>
+                  <p
+                    class="variante-warning-label"
+                    v-show="!producto.variante.length"
+                  >* Se debe agregar minimo una variante</p>
+                  <p
+                    class="variante-warning-label"
+                    v-show="this.mensajeCampoVariante"
+                  >{{this.mensajeCampoVariante}}</p>
                   <div class="d-flex justify-content-end">
                     <button
                       class="btn btn-primary m-2"
@@ -305,11 +325,30 @@
                     >Agregar Variante</button>
                     <!-- Permite agregar una nueva variante del producto -->
                   </div>
+                  <div
+                    class="show-tags d-flex justify-content-start align-items-center"
+                    v-if="producto.variante"
+                  >
+                    <!-- Se elimino el length -->
+                    <!-- Se muestran las variables creadas -->
+                    <span>Variantes agregadas:</span>
+                    <li
+                      v-for="(varianteProducto,index) in producto.variante"
+                      :key="index"
+                      class="d-inline-block m-2 border px-1"
+                    >
+                      {{varianteProducto.variantId}}
+                      <a href="#" @click="removeVariante(index)">
+                        <i class="fa fa-times-circle" aria-hidden="true"></i>
+                      </a>
+                    </li>
+                  </div>
                 </div>
-
+                <!-- columna 2 -->
                 <div class="col-lg-4">
                   <h4 class="display-6">Detalles del produto</h4>
                   <hr />
+                  <!-- precio -->
                   <div class="form-group">
                     <input
                       class="form-control"
@@ -318,6 +357,7 @@
                       v-model="producto.precio"
                     />
                   </div>
+                  <!-- Marca -->
                   <div class="form-group">
                     <input
                       class="form-control"
@@ -326,6 +366,7 @@
                       v-model="producto.marca"
                     />
                   </div>
+                  <!-- tags -->
                   <div class="form-group">
                     <input
                       class="form-control"
@@ -348,54 +389,35 @@
                       </li>
                     </div>
                   </div>
+                  <!-- mostrar variantes -->
+                  <!--
                   <div class="form-group">
-                    <input
-                      class="form-control"
-                      type="text"
-                      placeholder="Variantes"
-                      v-model="variante"
-                      @keyup.188="addVariante"
-                    />
-                    <div class="show-tags" v-if="producto.variantes">
-                      <!-- Se elimino el length -->
+                    <div class="show-tags" v-if="producto.variante">
                       <li
-                        v-for="(varianteProducto,index) in producto.variantes"
+                        v-for="(varianteProducto,index) in producto.variante"
                         :key="index"
                         class="d-inline-block m-2 border px-1"
                       >
-                        {{varianteProducto}}
+                        {{varianteProducto.variantId}}
                         <a href="#" @click="removeVariante(index)">
                           <i class="fa fa-times-circle" aria-hidden="true"></i>
                         </a>
                       </li>
                     </div>
                   </div>
+                  -->
+                  <!-- imagenes Agregadas -->
                   <div class="form-group">
                     <label for="product_image">Imagenes Producto</label>
-                    <input type="file" @change="cargarImagen" class="form-control" />
-                    <div
-                      class="progress my-2"
-                      v-show="progresoCargaImg < 100 && progresoCargaImg >0"
-                    >
-                      <div
-                        class="progress-bar"
-                        role="progressbar"
-                        :style="'width: '+progresoCargaImg+'%'"
-                        :aria-valuenow="progresoCargaImg"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      >
-                        <span
-                          v-if="progresoCargaImg < 100 && progresoCargaImg > 0"
-                        >Cargando Imagen...</span>
-                      </div>
-                    </div>
                   </div>
-                  <div class="form-group d-flex">
-                    <div v-for="(imagen,index) in producto.images" :key="index" class="p-1">
-                      <div class="img-wrapp">
-                        <img :src="imagen" alt="Error" width="80px" />
-                        <span class="delete-img" @click="deleteImage(imagen,index)">X</span>
+                  <div class="form-group" v-if="producto.variante">
+                    <div class="row">
+                      <div v-for="(variante,index) in producto.variante" :key="index" class="p-1">
+                        <div class="col-md-6">
+                          <div class="img-wrapp">
+                            <img :src="variante.variantImage" alt="Error" width="80px" />
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -405,7 +427,12 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            <button type="button" class="btn btn-primary" @click="agregarProducto">Agregar Producto</button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              :disabled="!producto.variante.length"
+              @click="agregarProducto"
+            >Agregar Producto</button>
           </div>
         </div>
       </div>
@@ -443,9 +470,6 @@ export default {
         marca: null,
         detalles: null,
         tags: [],
-        image: null,
-        images: [],
-        variantes: [],
         variante: [],
         productoId: null,
         selectedVariant: 0
@@ -459,7 +483,8 @@ export default {
       variantColor: null,
       variantId: null,
       variantImage: null,
-      variantQuantity: null
+      variantQuantity: null,
+      mensajeCampoVariante: null
     };
   },
   methods: {
@@ -469,7 +494,19 @@ export default {
     },
     deleteImage(img, index) {
       let image = fb.storage().refFromURL(img); //Se obtiene la referencia de la img como un objeto de donde esta ubicada en firebase
-      this.producto.images.splice(index, 1);
+      this.producto.variante.splice(index, 1);
+      image
+        .delete()
+        .then(() => {
+          console.log("Imagen borrada");
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    borrarImagenUnidad(img) {
+      let image = fb.storage().refFromURL(img); //Se obtiene la referencia de la img como un objeto de donde esta ubicada en firebase
+      this.variantImage = null;
       image
         .delete()
         .then(() => {
@@ -501,8 +538,8 @@ export default {
           () => {
             //successfull part, it runs when the load is completed
             uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
-              this.producto.image = downloadURL;
-              this.producto.images.push(downloadURL);
+              //this.producto.image = downloadURL;
+              //this.producto.images.push(downloadURL);
               this.variantImage = downloadURL;
             });
           }
@@ -516,10 +553,7 @@ export default {
         precio: null,
         marca: null,
         detalles: null,
-        tags: [""],
-        image: null,
-        images: [],
-        variantes: [""],
+        tags: [],
         variante: [],
         productoId: null,
         selectedVariant: 0
@@ -633,26 +667,44 @@ export default {
     removeTag(index) {
       this.producto.tags.splice(index, 1);
     },
-    addVariante() {
-      this.producto.variantes.push(
-        this.variante.substring(0, this.variante.length - 1)
-      );
-      this.variante = "";
-    },
     removeVariante(index) {
-      this.producto.variantes.splice(index, 1);
+      if (this.producto.variante[index]) {
+        const img = this.producto.variante[index].variantImage;
+        let image = fb.storage().refFromURL(img); //Se obtiene la referencia de la img como un objeto de donde esta ubicada en firebase
+        this.producto.variante[index].variantImage = "";
+        image
+          .delete()
+          .then(() => {
+            console.log("Imagen borrada");
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
+      this.producto.variante.splice(index, 1);
+      //this.producto.variantes.splice(index, 1);
     },
     agregarVarianteDeProducto() {
-      this.producto.variante.push({
-        variantId: parseInt(this.variantId),
-        variantColor: this.variantColor,
-        variantImage: this.variantImage,
-        variantQuantity: parseInt(this.variantQuantity)
-      });
-      this.variantId = '';
-      this.variantColor = '';
-      this.variantImage = '';
-      this.variantQuantity = '';
+      if (
+        this.variantId &&
+        this.variantColor &&
+        this.variantImage &&
+        this.variantQuantity
+      ) {
+        this.producto.variante.push({
+          variantId: parseInt(this.variantId),
+          variantColor: this.variantColor,
+          variantImage: this.variantImage,
+          variantQuantity: parseInt(this.variantQuantity)
+        });
+        this.variantId = null;
+        this.variantColor = null;
+        this.variantImage = null;
+        this.variantQuantity = null;
+        this.mensajeCampoVariante = null;
+      } else {
+        this.mensajeCampoVariante = "Debe ingresar todos lo campos";
+      }
     }
   },
   created() {
@@ -709,5 +761,10 @@ export default {
   position: relative;
   object-fit: cover;
   width: 100%;
+}
+.variante-warning-label {
+  font-weight: bold;
+  color: #a74646;
+  text-align: left;
 }
 </style>

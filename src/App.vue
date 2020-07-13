@@ -79,4 +79,10 @@ a:hover {
   -webkit-transform: translate(-30px, 0);
   transform: translate(-30px, 0);
 }
+.slide-enter-active, .slide-leave-active{
+    transition: opacity 2s;
+}
+.slide-enter, .slide-leave-to{
+    opacity: 0;
+}
 </style>

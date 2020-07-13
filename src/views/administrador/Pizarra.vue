@@ -4,7 +4,9 @@
           <div class="intro h-100">
               <div class="row h-100 justify-content-center align-items-center">
                   <div class="col-md-6">
+                      <transition name="slide">
                       <h3>Tu Pizarra</h3>
+                      </transition>
                       <p> El contenido de toda tu informacion sobre la empresa, estadisticas sobre los productos entre otros. </p>
                   </div>
                   <div class="col-md-6">
@@ -26,5 +28,6 @@ export default {
 .pizarra{
     margin-top: 30px;
 }
+
 
 </style>
