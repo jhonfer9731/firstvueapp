@@ -156,7 +156,7 @@
             <td scope="row">
               <div class="edit-off col-lg" v-show="!productoLoop.editOn">
                 <img
-                  :src="productoLoop.data().variante[0].variantImage"
+                  :src="productoLoop.data().variante[0].variantImage[0]"
                   :alt="alternative = 'no existe imagen'"
                   class="producto-imagen"
                 />
@@ -164,12 +164,13 @@
               <div class="edit-on col-lg" v-if="producto.variante" v-show="productoLoop.editOn">
                 <ul class="list-unstyled">
                   <li v-for="(variante,index) in producto.variante" :key="index" class="list-item card">
-                    <a href="#" @click="showImgModal(variante.variantImage)">Imagen{{index+1}}</a>
-                    <a href="#" @click="deleteImage(variante.variantImage,index)">
+                    <a href="#" @click="showImgModal(variante.variantImage[0])" v-if="variante.variantImage.length">Imagen{{index+1}}</a>
+                    <!-- <a href="#" @click="deleteImage(variante.variantImage[0],index)" v-if="variante.variantImage.length">
                       <i class="fa fa-times-circle"></i>
-                    </a>
+                    </a>  -->
                   </li>
                 </ul>
+                <!-- 
                 <div class="form-group">
                   <label for="product_image">Agregar Imagen:</label>
                   <input type="file" @change="cargarImagen" class="form-control" />
@@ -186,6 +187,7 @@
                     </div>
                   </div>
                 </div>
+                -->
               </div>
             </td>
             <!-- Botones editar y borrar -->
@@ -303,10 +305,10 @@
                         </div>
                       </div>
                     </div>
-                    <div class="p-1 form-group d-flex" v-if="variantImage">
-                      <div class="img-wrapp">
-                        <span class="delete-img" @click="borrarImagenUnidad(variantImage)">x</span>
-                        <img :src="variantImage" alt="Error" width="80px" />
+                    <div class="p-1 form-group d-flex" v-if="variantImage.length">
+                      <div class="img-wrapp" v-for="(image,index) in variantImage" :key="index">
+                        <span class="delete-img" @click="borrarImagenUnidad(variantImage,index)">x</span>
+                        <img :src="image" alt="Error" width="80px" />
                       </div>
                     </div>
                   </div>
@@ -389,23 +391,6 @@
                       </li>
                     </div>
                   </div>
-                  <!-- mostrar variantes -->
-                  <!--
-                  <div class="form-group">
-                    <div class="show-tags" v-if="producto.variante">
-                      <li
-                        v-for="(varianteProducto,index) in producto.variante"
-                        :key="index"
-                        class="d-inline-block m-2 border px-1"
-                      >
-                        {{varianteProducto.variantId}}
-                        <a href="#" @click="removeVariante(index)">
-                          <i class="fa fa-times-circle" aria-hidden="true"></i>
-                        </a>
-                      </li>
-                    </div>
-                  </div>
-                  -->
                   <!-- imagenes Agregadas -->
                   <div class="form-group">
                     <label for="product_image">Imagenes Producto</label>
@@ -413,9 +398,9 @@
                   <div class="form-group" v-if="producto.variante">
                     <div class="row">
                       <div v-for="(variante,index) in producto.variante" :key="index" class="p-1">
-                        <div class="col-md-6">
+                        <div class="col-md-6" v-for="(image,index) in variante.variantImage" :key="index">
                           <div class="img-wrapp">
-                            <img :src="variante.variantImage" alt="Error" width="80px" />
+                            <img :src="image" alt="Error" width="80px" />
                           </div>
                         </div>
                       </div>
@@ -482,7 +467,7 @@ export default {
       showImgInModal: "",
       variantColor: null,
       variantId: null,
-      variantImage: null,
+      variantImage: [],
       variantQuantity: null,
       mensajeCampoVariante: null
     };
@@ -504,9 +489,9 @@ export default {
           console.log(err);
         });
     },
-    borrarImagenUnidad(img) {
+    borrarImagenUnidad(img,index) {
       let image = fb.storage().refFromURL(img); //Se obtiene la referencia de la img como un objeto de donde esta ubicada en firebase
-      this.variantImage = null;
+      this.variantImage.splice(index,1)
       image
         .delete()
         .then(() => {
@@ -540,7 +525,7 @@ export default {
             uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
               //this.producto.image = downloadURL;
               //this.producto.images.push(downloadURL);
-              this.variantImage = downloadURL;
+              this.variantImage.push(downloadURL);
             });
           }
         );
@@ -688,7 +673,7 @@ export default {
       if (
         this.variantId &&
         this.variantColor &&
-        this.variantImage &&
+        this.variantImage.length &&
         this.variantQuantity
       ) {
         this.producto.variante.push({
@@ -699,7 +684,7 @@ export default {
         });
         this.variantId = null;
         this.variantColor = null;
-        this.variantImage = null;
+        this.variantImage = [];
         this.variantQuantity = null;
         this.mensajeCampoVariante = null;
       } else {

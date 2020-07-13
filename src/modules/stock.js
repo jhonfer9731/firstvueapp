@@ -2,18 +2,21 @@ import { db } from '@/firebase.js'
 
 const state = {
     productos: [
-        {
-            name: 'prueba'
-        }
-    ]
+
+    ],
+    productoConId : null
 };
 const getters = {
-    todosProductos: (state) => state.productos
+    todosProductos: (state) => state.productos,
+    productoConId: (state) => state.productoConId
 };
 
 const mutations = {
     actualizarProductos(state, payload) {
         state.productos = payload;
+    },
+    obtenerProductoConId(state,producto){
+        state.productoConId = producto
     }
 };
 
@@ -26,6 +29,14 @@ const actions = {
             //console.log(data)
             commit('actualizarProductos', data)
         });
+    },
+    async obtenerProductoConId({commit},productoId){
+        const producto = await db.collection('products').doc(productoId).get();
+        if(producto.exists){
+            commit('obtenerProductoConId',producto.data());
+        }else{
+            console.log("No existe el producto")
+        }
     }
 };
 

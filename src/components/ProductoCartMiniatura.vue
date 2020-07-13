@@ -8,7 +8,7 @@
         <img
           class
           :alt="dataInfoProducto.nombre"
-          :src="dataInfoProducto.variante.variantImage"
+          :src="dataInfoProducto.variante.variantImage[0]"
           width="100px"
           height="100px"
         />

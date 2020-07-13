@@ -5,11 +5,11 @@
         class="card-img-top col"
         :alt="producto.nombre"
         :src="require(`@/assets/images/${producto.variante[0].variantImage}`)"
-      /> -->
+      />-->
       <img
         class="card-img-top col"
         :alt="producto.nombre"
-        :src="producto.variante[0].variantImage"
+        :src="producto.variante[this.producto.selectedVariant].variantImage[0]"
       />
     </div>
     <div class="contenidoFlex mt-auto">
@@ -18,10 +18,12 @@
         <p class="card-text">Marca: {{producto.marca}}</p>
         <!-- <ul class="detalles">
            <li v-for="(detalle,index) in producto.detalles" :key="index">{{detalle}}</li> 
-        </ul> -->
-        <p class="card-text precioProducto">{{producto.precio | currency('$',0,{ thousandsSeparator: '.' })}} </p>
+        </ul>-->
+        <p
+          class="card-text precioProducto"
+        >{{producto.precio | currency('$',0,{ thousandsSeparator: '.' })}}</p>
         <button class="btn btn-success" @click="agregarCarrito">Agregar</button>
-        <button class="btn btn-secondary">Detalles</button>
+        <button class="btn btn-secondary" @click="verDetalles(producto.productoId)">Detalles</button>
       </div>
     </div>
   </div>
@@ -37,29 +39,26 @@ export default {
     }
   },
   computed: {
-    agregarIdProducto(){
+    agregarIdProducto() {
       return this.producto.variante[this.producto.selectedVariant].variantId;
     }
   },
-  methods:{
-    agregarCarrito(){
-      // window.$('.dropdown-menu').toggleClass('show')
-      // setTimeout(()=>{
-      //   window.$('.dropdown-menu').toggleClass('show')
-      // },1800)
-      //bus.$emit('agregarCarrito',this.agregarIdProducto);
-      //console.log(this.agregarIdProducto);
-      this.$store.commit('addToCart',this.producto) // primero el nombre de la mutation y luego el parametro
+  methods: {
+    verDetalles(productoId) {
+      this.$router.push({ name: "Detalles", params:{ id : productoId } });
+    },
+    agregarCarrito() {
+      this.$store.commit("addToCart", this.producto); // primero el nombre de la mutation y luego el parametro
       window.Toast.fire({
-            icon: "success",
-            title: "Producto Agregado al carrito de compras",
-            timer: 2000,
-            position: 'bottom-end',
-          });
-      this.$store.commit('enfatizarCarritoBoton',true)
-      setTimeout(()=>{
-        this.$store.commit('enfatizarCarritoBoton',false)
-      },500)
+        icon: "success",
+        title: "Producto Agregado al carrito de compras",
+        timer: 2000,
+        position: "bottom-end"
+      });
+      this.$store.commit("enfatizarCarritoBoton", true);
+      setTimeout(() => {
+        this.$store.commit("enfatizarCarritoBoton", false);
+      }, 500);
     }
   }
 };
@@ -78,6 +77,4 @@ export default {
 .card-img-top {
   max-width: 80%;
 }
-
-
 </style>

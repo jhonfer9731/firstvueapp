@@ -53,7 +53,7 @@ export default {
   data() {
     return {
       //productsAddedVariantId: [],
-      cantidadPorReferencia: {}
+      //cantidadPorReferencia: {}
       //enfasisCarritoClase : false,
       //productsAdded: [],
       // productsAdded2: [], // este dato es provicional

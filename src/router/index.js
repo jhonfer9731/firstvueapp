@@ -26,14 +26,20 @@ const routes = [
         component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
       },
       {
+        path: 'productos/detalles/:id',
+        name: 'Detalles',
+        props: true,
+        component: () => import(/* webpackChunkName: "detalles" */ '../views/Detalles.vue')
+      },
+      {
         path: 'productos',
         name: 'Productos',
-        component: () => import(/* webpackChunkName: "productos" */ '../views/Productos.vue')
+        component: () => import(/* webpackChunkName: "productos" */ '../views/Productos.vue'),
       },
       {
         path: 'registro',
         name: 'Registro',
-        component: () => import(/* webpackChunkName: "registro" */ '../views/Registro.vue')
+        component: () => import(/* webpackChunkName: "registro" */ '../views/Registro.vue'),
       },
       {
         path: 'confirmacioncompra',
@@ -59,7 +65,8 @@ const routes = [
       {
         path: 'productos',
         name: 'ProductosAdmin',
-        component: () => import(/* webpackChunkName: "productos" */ '../views/administrador/ProductosAdmin.vue')
+        component: () => import(/* webpackChunkName: "productos" */ '../views/administrador/ProductosAdmin.vue'),
+        
       },
       {
         path: 'perfil',

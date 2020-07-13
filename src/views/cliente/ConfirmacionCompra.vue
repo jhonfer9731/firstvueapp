@@ -10,7 +10,7 @@
             </a>
             <div class="ancho-imagen">
               <img
-                :src="item.variante.variantImage"
+                :src="item.variante.variantImage[0]"
                 alt="No hay imagen"
                 class="align-self-center mr-3"
               />

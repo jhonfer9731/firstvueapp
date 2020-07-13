@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import store from '@/store.js';
+
 import ProductoCard from '@/components/ProductoCard';
 import {mapGetters, mapActions} from 'vuex';
 export default {
@@ -26,7 +26,7 @@ export default {
     },
     data(){
         return{
-            productos : store.productos
+            
         }
     },
     methods :{
